@@ -750,24 +750,10 @@
         </div>
     </main>
 
-    <!-- 页脚 -->
-    <footer>
-        <div class="footer-content">
-            <ul class="footer-links">
-                <li><a href="index.html">个人门户</a></li>
-                <li><a href="bookshelf.html">书架</a></li>
-                <li><a href="blog.html">博客</a></li>
-                <li><a href="image-host.html">图床</a></li>
-                <li><a href="about.html">关于</a></li>
-                <li><a href="contact.html">联系</a></li>
-            </ul>
-            <p class="copyright">© 2023 个人门户 | 纯静态部署，支持夜间模式与移动端适配</p>
-            <p class="copyright">最后更新: <span id="current-date"></span> | 藏书量: <span id="book-count">0</span> 本</p>
-        </div>
-    </footer>
-
-    <!-- 加载配置 -->
+    <!-- 加载配置和共享组件 -->
     <script src="config.js"></script>
+    <script src="shared/header.js"></script>
+    <script src="shared/footer.js"></script>
     <script src="shared/darkmode.js"></script>
     
     <script>
@@ -1149,9 +1135,6 @@
             
             const tags = getAllTags(books);
             document.getElementById('total-tags').textContent = tags.length;
-            
-            // 更新页脚中的书籍数量
-            document.getElementById('book-count').textContent = books.length;
         }
 
         // 复制到剪贴板
@@ -1201,28 +1184,12 @@
             }
         }
 
-        // 设置当前日期
-        function setCurrentDate() {
-            const currentDateElement = document.getElementById('current-date');
-            if (currentDateElement) {
-                const now = new Date();
-                const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                currentDateElement.textContent = now.toLocaleDateString('zh-CN', options);
-            }
-        }
-
         // 初始化页面
         async function initPage() {
-            // 设置当前日期
-            setCurrentDate();
-            
-            // 初始化暗色模式
+            // 加载共享组件
+            new HeaderComponent('bookshelf');
+            new FooterComponent({ books: 0 });
             new DarkModeComponent();
-            
-            // 为夜间模式切换按钮添加事件监听
-            document.getElementById('checkbox').addEventListener('change', function() {
-                new DarkModeComponent().toggleDarkMode();
-            });
             
             // 加载书籍数据
             const books = await loadBooksData();
