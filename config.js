@@ -6,7 +6,7 @@ const CONFIG = {
   // 您的网站基础URL（非常重要！）
   // 示例: "https://您的用户名.github.io/您的仓库名/"
   // 注意：URL必须以斜杠结尾！
-  SITE_BASE_URL: "https://dongfangmingjian.github.io/blog/",
+  SITE_BASE_URL: "https://dongfangmingjian.github.io/demo2026/",
   
   // 网站信息
   SITE_NAME: "我的数字空间",
