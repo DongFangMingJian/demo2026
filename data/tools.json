@@ -1,0 +1,132 @@
+[file name]: data/tools.json
+[file content begin]
+{
+  "tools": [
+    {
+      "id": 1,
+      "title": "字数统计器",
+      "icon": "fas fa-font",
+      "description": "精确统计文字中的汉字、英文字母、数字、标点符号数量，支持多种统计维度。",
+      "link": "tools/word-counter.html",
+      "linkText": "使用工具",
+      "color": "#4a6fa5",
+      "category": "文本处理",
+      "tags": ["统计", "文本分析", "字数统计"],
+      "available": true,
+      "features": ["实时统计", "多维度分析", "阅读时间估算"]
+    },
+    {
+      "id": 2,
+      "title": "JSON格式化工具",
+      "icon": "fas fa-code",
+      "description": "格式化、验证和美化JSON数据，支持语法高亮和错误检测。",
+      "link": "#",
+      "linkText": "即将上线",
+      "color": "#ff7e5f",
+      "category": "开发工具",
+      "tags": ["JSON", "格式化", "开发", "代码"],
+      "available": false,
+      "comingSoon": true,
+      "features": ["语法高亮", "错误检测", "格式化美化"]
+    },
+    {
+      "id": 3,
+      "title": "Base64编解码",
+      "icon": "fas fa-lock",
+      "description": "文本和图片的Base64编码与解码，支持文件上传。",
+      "link": "#",
+      "linkText": "即将上线",
+      "color": "#6b8cbc",
+      "category": "编码工具",
+      "tags": ["Base64", "编码", "解码", "安全"],
+      "available": false,
+      "comingSoon": true,
+      "features": ["文本编码", "图片转换", "文件支持"]
+    },
+    {
+      "id": 4,
+      "title": "时间戳转换",
+      "icon": "fas fa-clock",
+      "description": "时间戳与日期时间相互转换，支持多种格式和时区设置。",
+      "link": "#",
+      "linkText": "即将上线",
+      "color": "#4CAF50",
+      "category": "时间工具",
+      "tags": ["时间戳", "日期", "转换", "时区"],
+      "available": false,
+      "comingSoon": true,
+      "features": ["多种格式", "时区支持", "批量转换"]
+    },
+    {
+      "id": 5,
+      "title": "颜色选择器",
+      "icon": "fas fa-palette",
+      "description": "RGB、HEX、HSL颜色值转换，调色板生成和色彩搭配。",
+      "link": "#",
+      "linkText": "即将上线",
+      "color": "#9C27B0",
+      "category": "设计工具",
+      "tags": ["颜色", "调色板", "设计", "配色"],
+      "available": false,
+      "comingSoon": true,
+      "features": ["颜色转换", "调色板", "配色方案"]
+    },
+    {
+      "id": 6,
+      "title": "二维码生成器",
+      "icon": "fas fa-qrcode",
+      "description": "生成自定义二维码，支持文本、URL、WiFi等多种内容类型。",
+      "link": "#",
+      "linkText": "即将上线",
+      "color": "#FF9800",
+      "category": "生成工具",
+      "tags": ["二维码", "生成", "分享", "扫描"],
+      "available": false,
+      "comingSoon": true,
+      "features": ["多种内容", "自定义样式", "批量生成"]
+    },
+    {
+      "id": 7,
+      "title": "正则表达式测试器",
+      "icon": "fas fa-regex",
+      "description": "在线测试和调试正则表达式，支持多种语言和匹配模式。",
+      "link": "#",
+      "linkText": "开发中",
+      "color": "#E91E63",
+      "category": "开发工具",
+      "tags": ["正则表达式", "测试", "调试", "模式匹配"],
+      "available": false,
+      "features": ["实时测试", "多种模式", "匹配高亮"]
+    },
+    {
+      "id": 8,
+      "title": "Markdown编辑器",
+      "icon": "fas fa-markdown",
+      "description": "在线Markdown编辑器，实时预览，支持多种语法扩展。",
+      "link": "#",
+      "linkText": "开发中",
+      "color": "#2196F3",
+      "category": "文本处理",
+      "tags": ["Markdown", "编辑器", "预览", "写作"],
+      "available": false,
+      "features": ["实时预览", "语法高亮", "导出功能"]
+    }
+  ],
+  "categories": [
+    "全部工具",
+    "文本处理",
+    "开发工具",
+    "编码工具",
+    "时间工具",
+    "设计工具",
+    "生成工具"
+  ],
+  "stats": {
+    "totalTools": 8,
+    "availableTools": 1,
+    "comingSoon": 5,
+    "inDevelopment": 2
+  },
+  "lastUpdated": "2024-02-03"
+}
+[file content end]
