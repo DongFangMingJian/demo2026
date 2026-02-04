@@ -68,7 +68,7 @@
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -207,74 +207,7 @@
             margin: 0 auto;
         }
         
-        /* ==================== 词牌分类布局 ==================== */
-        .cipai-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-        
-        @media (max-width: 1100px) {
-            .cipai-layout {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-        }
-        
-        /* ==================== 左侧分类导航 ==================== */
-        .letter-nav {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            height: fit-content;
-            box-shadow: 0 8px 20px var(--shadow-color);
-            position: sticky;
-            top: 100px;
-        }
-        
-        .letter-nav h3 {
-            font-size: 1.4rem;
-            margin-bottom: 20px;
-            color: var(--primary-color);
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(74, 111, 165, 0.2);
-        }
-        
-        .letter-filter {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        
-        .letter-btn {
-            padding: 8px 15px;
-            background-color: rgba(74, 111, 165, 0.1);
-            color: var(--primary-color);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: var(--transition);
-            min-width: 50px;
-            text-align: center;
-        }
-        
-        .letter-btn:hover, .letter-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px var(--shadow-color);
-        }
-        
-        .letter-btn.all-letters {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        
-        /* ==================== 右侧词牌展示区域 ==================== */
+        /* ==================== 词牌选择区域 ==================== */
         .cipai-section {
             background-color: var(--card-bg);
             border-radius: var(--border-radius);
@@ -288,11 +221,103 @@
             box-shadow: var(--shadow-hover);
         }
         
+        /* 字母导航 */
+        .letter-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(74, 111, 165, 0.05);
+            border-radius: var(--border-radius);
+        }
+        
+        .letter-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bg-color);
+            border: 2px solid var(--border-color);
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .letter-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-3px);
+        }
+        
+        .letter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 8px rgba(74, 111, 165, 0.3);
+        }
+        
+        /* 字母分组容器 */
+        .letter-groups-container {
+            margin-top: 20px;
+        }
+        
+        .letter-group {
+            margin-bottom: 30px;
+            display: none;
+        }
+        
+        .letter-group.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .letter-group-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .letter-group-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-right: 15px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgba(74, 111, 165, 0.1);
+            border-radius: 50%;
+        }
+        
+        .letter-group-count {
+            font-size: 0.9rem;
+            color: var(--text-color-light);
+            background-color: rgba(74, 111, 165, 0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+        }
+        
+        /* 词牌选择器 */
         .cipai-selector {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 20px;
-            margin-top: 20px;
         }
         
         .cipai-card {
@@ -302,9 +327,11 @@
             cursor: pointer;
             transition: var(--transition);
             border: 2px solid transparent;
-            text-align: center;
             position: relative;
             overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         
         .cipai-card:hover {
@@ -333,6 +360,18 @@
             margin-bottom: 8px;
             color: var(--primary-color);
             font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .cipai-pinyin {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            background-color: rgba(255, 126, 95, 0.1);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-style: italic;
         }
         
         .cipai-stats {
@@ -356,6 +395,68 @@
             color: var(--text-color-light);
             margin-top: 10px;
             font-style: italic;
+            flex-grow: 1;
+        }
+        
+        .cipai-excerpt {
+            font-size: 0.9rem;
+            color: var(--text-color-light);
+            margin-top: 10px;
+            line-height: 1.4;
+            font-family: "Noto Serif SC", "Source Han Serif SC", "Source Han Serif", serif;
+            border-left: 3px solid var(--border-color);
+            padding-left: 10px;
+        }
+        
+        /* 搜索框 */
+        .cipai-search-container {
+            position: relative;
+            margin-bottom: 25px;
+        }
+        
+        .cipai-search-input {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid var(--border-color);
+            border-radius: 30px;
+            font-size: 1rem;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+        
+        .cipai-search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+        
+        .cipai-search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+        }
+        
+        .search-results-info {
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: var(--text-color-light);
+            text-align: center;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-color-light);
+        }
+        
+        .no-results i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--secondary-color);
         }
         
         /* ==================== 文字展示区域 ==================== */
@@ -978,6 +1079,16 @@
                 font-size: 1rem;
             }
             
+            .letter-nav {
+                gap: 8px;
+            }
+            
+            .letter-btn {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
+            }
+            
             .cipai-selector {
                 grid-template-columns: 1fr;
             }
@@ -1075,59 +1186,16 @@
             .nav-links li {
                 margin: 5px 10px 5px 0;
             }
-        }
-        
-        /* ==================== 字母导航样式 ==================== */
-        .letter-section {
-            margin-bottom: 40px;
-        }
-        
-        .letter-section h3 {
-            font-size: 1.4rem;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid rgba(74, 111, 165, 0.2);
-        }
-        
-        .letter-nav-container {
-            background-color: var(--card-bg);
-            border-radius: var(--border-radius);
-            padding: 25px;
-            box-shadow: 0 8px 20px var(--shadow-color);
-        }
-        
-        .letter-nav-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-        }
-        
-        .letter-nav-btn {
-            padding: 8px 15px;
-            background-color: rgba(74, 111, 165, 0.1);
-            color: var(--primary-color);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            transition: var(--transition);
-            min-width: 50px;
-            text-align: center;
-        }
-        
-        .letter-nav-btn:hover, .letter-nav-btn.active {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px var(--shadow-color);
-        }
-        
-        .letter-nav-btn.all {
-            width: 100%;
-            margin-bottom: 10px;
+            
+            .letter-nav {
+                gap: 6px;
+            }
+            
+            .letter-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -1163,33 +1231,39 @@
             <p>支持平仄校验与押韵辅助，为您创作古典诗词提供专业工具</p>
         </section>
 
-        <!-- 字母导航区域 -->
-        <section class="letter-section">
-            <h3>词牌首字母分类</h3>
-            <div class="letter-nav-container">
-                <div class="letter-nav-buttons" id="letterNav">
-                    <!-- 字母导航按钮将通过JavaScript动态生成 -->
+        <!-- 词牌选择 -->
+        <section class="cipai-section">
+            <h3>选择词牌</h3>
+            <p>按首字母浏览或搜索词牌，选择后系统会自动显示该词牌的平仄格式和押韵要求。</p>
+            
+            <!-- 搜索框 -->
+            <div class="cipai-search-container">
+                <div class="cipai-search-icon">
+                    <i class="fas fa-search"></i>
                 </div>
+                <input type="text" class="cipai-search-input" id="cipaiSearch" placeholder="搜索词牌名（如：江城子、如梦令）">
+            </div>
+            
+            <!-- 字母导航 -->
+            <div class="letter-nav" id="letterNav">
+                <!-- 字母导航将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 搜索结果信息 -->
+            <div class="search-results-info" id="searchResultsInfo"></div>
+            
+            <!-- 字母分组容器 -->
+            <div class="letter-groups-container" id="letterGroupsContainer">
+                <!-- 按字母分组的词牌将通过JavaScript动态生成 -->
+            </div>
+            
+            <!-- 无搜索结果提示 -->
+            <div class="no-results" id="noResults" style="display: none;">
+                <i class="fas fa-search"></i>
+                <h4>未找到相关词牌</h4>
+                <p>请尝试使用其他关键词搜索，或浏览上方字母分类</p>
             </div>
         </section>
-
-        <!-- 词牌选择区域 -->
-        <div class="cipai-layout">
-            <!-- 左侧分类导航 -->
-            <nav class="letter-nav" id="categoryNav">
-                <!-- 字母分类导航将通过JavaScript动态生成 -->
-            </nav>
-
-            <!-- 右侧词牌展示 -->
-            <section class="cipai-section">
-                <h3 id="currentCategoryTitle">全部词牌</h3>
-                <p id="currentCategoryDesc">选择下方词牌，系统会自动显示该词牌的平仄格式和押韵要求。</p>
-                
-                <div class="cipai-selector" id="cipaiSelector">
-                    <!-- 词牌选项将通过JavaScript动态生成 -->
-                </div>
-            </section>
-        </div>
         
         <!-- 文字展示区域 -->
         <section class="text-display">
@@ -1249,8 +1323,7 @@
             <p>5. 多音字处理：多音字有切换图标，点击可以循环切换不同读音并重新校验平仄和押韵。</p>
             <p>6. 错误提示：如果声调或押韵不符合要求，槽位背景会变红提示并轻微抖动。</p>
             <p>7. 操作按钮：使用粘贴、清空、聚焦按钮辅助填词。</p>
-            <p>8. 字母分类：使用上方字母分类快速定位词牌，或使用左侧分类导航浏览。</p>
-            <p>9. 夜间模式：点击右上角开关切换夜间模式，保护眼睛并提供更好的夜间浏览体验。</p>
+            <p>8. 夜间模式：点击右上角开关切换夜间模式，保护眼睛并提供更好的夜间浏览体验。</p>
         </section>
         
         <!-- 页脚 - 完整的页脚链接 -->
@@ -1324,6 +1397,41 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const cipaiConfigs = await response.json();
+                
+                // 为每个词牌添加首字母（如果配置中没有）
+                cipaiConfigs.forEach(cipai => {
+                    if (!cipai.firstLetter) {
+                        // 提取词牌名的第一个字符的首字母拼音
+                        const firstChar = cipai.name.charAt(0);
+                        try {
+                            const pinyinResult = pinyin(firstChar, { toneType: 'none', pattern: 'first' });
+                            cipai.firstLetter = pinyinResult.toUpperCase();
+                        } catch (error) {
+                            // 如果获取拼音失败，使用字符本身
+                            cipai.firstLetter = firstChar;
+                        }
+                    }
+                    
+                    // 添加拼音字段（用于搜索）
+                    if (!cipai.pinyinName) {
+                        try {
+                            cipai.pinyinName = pinyin(cipai.name, { toneType: 'none' });
+                        } catch (error) {
+                            cipai.pinyinName = cipai.name;
+                        }
+                    }
+                    
+                    // 添加搜索关键词
+                    if (!cipai.searchKeywords) {
+                        cipai.searchKeywords = [
+                            cipai.name,
+                            cipai.pinyinName,
+                            cipai.description,
+                            cipai.rhymeType
+                        ].join(' ');
+                    }
+                });
+                
                 return cipaiConfigs;
             } catch (error) {
                 console.error('加载词牌配置失败:', error);
@@ -1338,52 +1446,13 @@
                         format: '示例格式',
                         stanzas: 1,
                         examples: [],
-                        rhymeGroups: []
+                        rhymeGroups: [],
+                        firstLetter: 'D',
+                        pinyinName: 'mo ren ci pai',
+                        searchKeywords: '默认词牌 mo ren ci pai 示例词牌 平韵格'
                     }
                 ];
             }
-        }
-
-        // 获取词牌名的拼音首字母
-        function getFirstLetter(name) {
-            try {
-                const pinyinResult = pinyin(name, { 
-                    pattern: 'first',
-                    toneType: 'none'
-                });
-                return pinyinResult.toUpperCase();
-            } catch (error) {
-                console.error('获取拼音首字母失败:', error, '词牌名:', name);
-                return '#';
-            }
-        }
-
-        // 按首字母分组词牌
-        function groupCipaiByFirstLetter(cipaiList) {
-            const groups = {};
-            
-            // 初始化所有字母组
-            const allLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            for (let letter of allLetters) {
-                groups[letter] = [];
-            }
-            groups['#'] = []; // 其他分类
-            
-            cipaiList.forEach(cipai => {
-                const firstLetter = getFirstLetter(cipai.name);
-                if (firstLetter && /^[A-Z]$/.test(firstLetter)) {
-                    groups[firstLetter].push(cipai);
-                } else {
-                    groups['#'].push(cipai);
-                }
-            });
-            
-            // 按字母顺序排序每个组内的词牌
-            Object.keys(groups).forEach(letter => {
-                groups[letter].sort((a, b) => a.name.localeCompare(b.name, 'zh-CN'));
-            });
-            
-            return groups;
         }
 
         class CiFillAssistant {
@@ -1400,256 +1469,319 @@
                 this.rhymeGroups = [];
                 this.groupVowels = {}; // 存储每个韵组的韵母
                 
-                // 字母分类相关
-                this.cipaiByLetter = {};
-                this.currentLetter = 'all';
+                // 分类相关属性
+                this.letterGroups = {};
+                this.currentLetter = '全部';
+                this.searchQuery = '';
                 
                 this.init();
             }
 
             init() {
+                this.groupCipaiByLetter();
                 this.createLetterNavigation();
-                this.createCategoryNav();
+                this.createLetterGroups();
                 this.bindEvents();
                 
                 // 默认选择第一个词牌
                 if (this.cipaiConfigs && this.cipaiConfigs.length > 0) {
                     this.selectCipai(this.cipaiConfigs[0]);
+                    this.showLetterGroup('全部');
                 }
+            }
+
+            // 按首字母分组词牌
+            groupCipaiByLetter() {
+                this.letterGroups = {};
+                
+                // 添加"全部"分组
+                this.letterGroups['全部'] = [...this.cipaiConfigs];
+                
+                // 按首字母分组
+                this.cipaiConfigs.forEach(cipai => {
+                    const letter = cipai.firstLetter || '其他';
+                    
+                    if (!this.letterGroups[letter]) {
+                        this.letterGroups[letter] = [];
+                    }
+                    
+                    this.letterGroups[letter].push(cipai);
+                });
+                
+                // 按字母顺序排序
+                const sortedLetters = Object.keys(this.letterGroups).sort((a, b) => {
+                    if (a === '全部') return -1;
+                    if (b === '全部') return 1;
+                    return a.localeCompare(b);
+                });
+                
+                // 重新排序分组
+                const sortedGroups = {};
+                sortedLetters.forEach(letter => {
+                    sortedGroups[letter] = this.letterGroups[letter];
+                });
+                
+                this.letterGroups = sortedGroups;
             }
 
             // 创建字母导航
             createLetterNavigation() {
-                // 按首字母分组词牌
-                this.cipaiByLetter = groupCipaiByFirstLetter(this.cipaiConfigs);
-                
-                // 创建字母导航按钮
                 const letterNav = document.getElementById('letterNav');
-                if (!letterNav) return;
+                letterNav.innerHTML = '';
                 
-                let letterNavHTML = '';
-                
-                // 添加"全部"按钮
-                letterNavHTML += `
-                    <button class="letter-nav-btn all ${this.currentLetter === 'all' ? 'active' : ''}" 
-                            data-letter="all">
-                        全部词牌
-                    </button>
-                `;
-                
-                // 添加字母按钮
-                const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-                letters.forEach(letter => {
-                    const count = this.cipaiByLetter[letter]?.length || 0;
-                    if (count > 0) {
-                        letterNavHTML += `
-                            <button class="letter-nav-btn ${this.currentLetter === letter ? 'active' : ''}" 
-                                    data-letter="${letter}"
-                                    title="${letter} (${count}个词牌)">
-                                ${letter}
-                            </button>
-                        `;
-                    } else {
-                        letterNavHTML += `
-                            <button class="letter-nav-btn" disabled
-                                    title="暂无${letter}开头的词牌">
-                                ${letter}
-                            </button>
-                        `;
+                Object.keys(this.letterGroups).forEach(letter => {
+                    const letterBtn = document.createElement('button');
+                    letterBtn.className = 'letter-btn';
+                    if (letter === '全部') {
+                        letterBtn.classList.add('active');
                     }
-                });
-                
-                // 添加"其他"按钮（非字母开头）
-                const otherCount = this.cipaiByLetter['#']?.length || 0;
-                if (otherCount > 0) {
-                    letterNavHTML += `
-                        <button class="letter-nav-btn ${this.currentLetter === '#' ? 'active' : ''}" 
-                                data-letter="#"
-                                title="其他 (${otherCount}个词牌)">
-                            #
-                        </button>
-                    `;
-                }
-                
-                letterNav.innerHTML = letterNavHTML;
-                
-                // 为字母按钮添加事件监听
-                document.querySelectorAll('.letter-nav-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        if (btn.disabled) return;
-                        
-                        const letter = btn.getAttribute('data-letter');
-                        this.currentLetter = letter;
-                        
-                        // 更新UI
-                        this.updateLetterNavigation();
-                        this.updateCipaiDisplay();
-                        this.updateCategoryText();
+                    letterBtn.textContent = letter === '全部' ? '全部' : letter;
+                    letterBtn.dataset.letter = letter;
+                    
+                    letterBtn.addEventListener('click', () => {
+                        this.showLetterGroup(letter);
                     });
+                    
+                    letterNav.appendChild(letterBtn);
                 });
             }
 
-            // 创建分类导航（左侧）
-            createCategoryNav() {
-                const categoryNav = document.getElementById('categoryNav');
-                if (!categoryNav) return;
+            // 创建字母分组
+            createLetterGroups() {
+                const groupsContainer = document.getElementById('letterGroupsContainer');
+                groupsContainer.innerHTML = '';
                 
-                let categoryNavHTML = '<h3>按字母分类</h3><div class="letter-filter">';
-                
-                // 添加"全部"按钮
-                categoryNavHTML += `
-                    <button class="letter-btn all-letters ${this.currentLetter === 'all' ? 'active' : ''}" 
-                            data-letter="all">
-                        全部词牌 (${this.cipaiConfigs.length})
-                    </button>
-                `;
-                
-                // 添加字母按钮
-                const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
-                letters.forEach(letter => {
-                    const count = this.cipaiByLetter[letter]?.length || 0;
-                    if (count > 0) {
-                        categoryNavHTML += `
-                            <button class="letter-btn ${this.currentLetter === letter ? 'active' : ''}" 
-                                    data-letter="${letter}">
-                                ${letter} (${count})
-                            </button>
-                        `;
+                Object.keys(this.letterGroups).forEach(letter => {
+                    const letterGroup = document.createElement('div');
+                    letterGroup.className = 'letter-group';
+                    letterGroup.dataset.letter = letter;
+                    
+                    if (letter === '全部') {
+                        letterGroup.classList.add('active');
                     }
+                    
+                    const groupHeader = document.createElement('div');
+                    groupHeader.className = 'letter-group-header';
+                    
+                    const groupTitle = document.createElement('div');
+                    groupTitle.className = 'letter-group-title';
+                    groupTitle.textContent = letter === '全部' ? '全' : letter;
+                    
+                    const groupCount = document.createElement('div');
+                    groupCount.className = 'letter-group-count';
+                    groupCount.textContent = `${this.letterGroups[letter].length} 个词牌`;
+                    
+                    groupHeader.appendChild(groupTitle);
+                    groupHeader.appendChild(groupCount);
+                    
+                    const cipaiSelector = document.createElement('div');
+                    cipaiSelector.className = 'cipai-selector';
+                    cipaiSelector.id = `cipaiSelector-${letter}`;
+                    
+                    // 为当前分组创建词牌卡片
+                    this.letterGroups[letter].forEach(cipai => {
+                        const card = this.createCipaiCard(cipai);
+                        cipaiSelector.appendChild(card);
+                    });
+                    
+                    letterGroup.appendChild(groupHeader);
+                    letterGroup.appendChild(cipaiSelector);
+                    groupsContainer.appendChild(letterGroup);
                 });
+            }
+
+            // 创建词牌卡片
+            createCipaiCard(cipai) {
+                const card = document.createElement('div');
+                card.className = 'cipai-card';
+                card.dataset.cipaiId = cipai.id;
                 
-                // 添加"其他"按钮
-                const otherCount = this.cipaiByLetter['#']?.length || 0;
-                if (otherCount > 0) {
-                    categoryNavHTML += `
-                        <button class="letter-btn ${this.currentLetter === '#' ? 'active' : ''}" 
-                                data-letter="#">
-                            # (${otherCount})
-                        </button>
-                    `;
+                // 获取格式的前几个字作为预览
+                let excerpt = cipai.format || '';
+                if (excerpt.length > 30) {
+                    excerpt = excerpt.substring(0, 30) + '...';
                 }
                 
-                categoryNavHTML += '</div>';
-                
-                // 添加词牌统计
-                categoryNavHTML += `
-                    <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(74, 111, 165, 0.2);">
-                        <h4>词牌统计</h4>
-                        <p style="font-size: 0.9rem; color: var(--text-color-light);">
-                            共 ${this.cipaiConfigs.length} 个词牌
-                        </p>
+                card.innerHTML = `
+                    <div class="cipai-title">
+                        <span>${cipai.name}</span>
+                        <span class="cipai-pinyin">${cipai.pinyinName || ''}</span>
                     </div>
+                    <div class="cipai-stats">${cipai.description}</div>
+                    <div class="cipai-rhyme-type">${cipai.rhymeType}</div>
+                    <div class="cipai-format">${cipai.format ? '格式: ' + cipai.format : ''}</div>
+                    <div class="cipai-excerpt">${excerpt}</div>
                 `;
                 
-                categoryNav.innerHTML = categoryNavHTML;
-                
-                // 为分类导航按钮添加事件监听
-                categoryNav.querySelectorAll('.letter-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const letter = btn.getAttribute('data-letter');
-                        this.currentLetter = letter;
-                        
-                        // 更新UI
-                        this.updateLetterNavigation();
-                        this.updateCipaiDisplay();
-                        this.updateCategoryText();
-                    });
+                card.addEventListener('click', () => {
+                    this.selectCipai(cipai);
                 });
+                
+                return card;
             }
 
-            // 更新字母导航
-            updateLetterNavigation() {
-                // 更新字母导航按钮
-                document.querySelectorAll('.letter-nav-btn').forEach(btn => {
-                    const letter = btn.getAttribute('data-letter');
-                    btn.classList.remove('active');
-                    if (letter === this.currentLetter) {
-                        btn.classList.add('active');
-                    }
-                });
+            // 显示指定字母的分组
+            showLetterGroup(letter) {
+                // 更新当前字母
+                this.currentLetter = letter;
                 
-                // 更新分类导航按钮
+                // 更新字母导航按钮状态
                 document.querySelectorAll('.letter-btn').forEach(btn => {
-                    const letter = btn.getAttribute('data-letter');
-                    btn.classList.remove('active');
-                    if (letter === this.currentLetter) {
+                    if (btn.dataset.letter === letter) {
                         btn.classList.add('active');
+                    } else {
+                        btn.classList.remove('active');
                     }
                 });
+                
+                // 显示对应的分组
+                document.querySelectorAll('.letter-group').forEach(group => {
+                    if (group.dataset.letter === letter) {
+                        group.classList.add('active');
+                    } else {
+                        group.classList.remove('active');
+                    }
+                });
+                
+                // 更新搜索结果信息
+                this.updateSearchResultsInfo();
             }
 
-            // 更新词牌显示
-            updateCipaiDisplay() {
-                const selector = document.getElementById('cipaiSelector');
-                if (!selector) return;
+            // 搜索词牌
+            searchCipai(query) {
+                this.searchQuery = query.toLowerCase().trim();
                 
-                let cipaiList = [];
-                
-                // 获取当前字母对应的词牌列表
-                if (this.currentLetter === 'all') {
-                    cipaiList = this.cipaiConfigs;
-                } else {
-                    cipaiList = this.cipaiByLetter[this.currentLetter] || [];
-                }
-                
-                selector.innerHTML = '';
-                
-                if (cipaiList.length === 0) {
-                    selector.innerHTML = `
-                        <div style="grid-column: 1/-1; text-align: center; padding: 40px 20px;">
-                            <h3 style="color: var(--secondary-color); margin-bottom: 20px;">暂无词牌</h3>
-                            <p style="color: var(--secondary-color);">该分类下暂无词牌数据</p>
-                        </div>
-                    `;
+                // 如果没有搜索词，显示当前字母分组
+                if (!this.searchQuery) {
+                    this.showLetterGroup(this.currentLetter);
+                    document.getElementById('noResults').style.display = 'none';
                     return;
                 }
                 
-                cipaiList.forEach(cipai => {
-                    const card = document.createElement('div');
-                    card.className = 'cipai-card';
-                    if (this.currentCipai && this.currentCipai.id === cipai.id) {
-                        card.classList.add('active');
-                    }
-                    card.dataset.cipaiId = cipai.id;
+                // 搜索所有词牌
+                const searchResults = this.cipaiConfigs.filter(cipai => {
+                    return cipai.searchKeywords.toLowerCase().includes(this.searchQuery);
+                });
+                
+                // 隐藏所有字母分组
+                document.querySelectorAll('.letter-group').forEach(group => {
+                    group.classList.remove('active');
+                });
+                
+                // 显示搜索结果
+                if (searchResults.length > 0) {
+                    // 创建搜索结果分组
+                    const searchGroup = document.createElement('div');
+                    searchGroup.className = 'letter-group active';
+                    searchGroup.dataset.letter = 'search';
                     
-                    card.innerHTML = `
-                        <div class="cipai-title">${cipai.name}</div>
-                        <div class="cipai-stats">${cipai.description}</div>
-                        <div class="cipai-rhyme-type">${cipai.rhymeType}</div>
-                        <div class="cipai-format">${cipai.format}</div>
-                    `;
+                    const groupHeader = document.createElement('div');
+                    groupHeader.className = 'letter-group-header';
                     
-                    card.addEventListener('click', () => {
-                        this.selectCipai(cipai);
+                    const groupTitle = document.createElement('div');
+                    groupTitle.className = 'letter-group-title';
+                    groupTitle.innerHTML = '<i class="fas fa-search"></i>';
+                    
+                    const groupCount = document.createElement('div');
+                    groupCount.className = 'letter-group-count';
+                    groupCount.textContent = `${searchResults.length} 个结果`;
+                    
+                    groupHeader.appendChild(groupTitle);
+                    groupHeader.appendChild(groupCount);
+                    
+                    const cipaiSelector = document.createElement('div');
+                    cipaiSelector.className = 'cipai-selector';
+                    cipaiSelector.id = 'cipaiSelector-search';
+                    
+                    // 为搜索结果创建词牌卡片
+                    searchResults.forEach(cipai => {
+                        const card = this.createCipaiCard(cipai);
+                        cipaiSelector.appendChild(card);
                     });
                     
-                    selector.appendChild(card);
-                });
+                    searchGroup.appendChild(groupHeader);
+                    searchGroup.appendChild(cipaiSelector);
+                    
+                    // 清空并添加搜索结果
+                    const groupsContainer = document.getElementById('letterGroupsContainer');
+                    const existingSearchGroup = document.querySelector('.letter-group[data-letter="search"]');
+                    
+                    if (existingSearchGroup) {
+                        existingSearchGroup.replaceWith(searchGroup);
+                    } else {
+                        groupsContainer.appendChild(searchGroup);
+                    }
+                    
+                    // 隐藏无结果提示
+                    document.getElementById('noResults').style.display = 'none';
+                } else {
+                    // 显示无结果提示
+                    document.getElementById('noResults').style.display = 'block';
+                }
+                
+                // 更新搜索结果信息
+                this.updateSearchResultsInfo();
             }
 
-            // 更新分类文本
-            updateCategoryText() {
-                const titleElement = document.getElementById('currentCategoryTitle');
-                const descElement = document.getElementById('currentCategoryDesc');
+            // 更新搜索结果信息
+            updateSearchResultsInfo() {
+                const resultsInfo = document.getElementById('searchResultsInfo');
                 
-                if (!titleElement || !descElement) return;
-                
-                let title = '全部词牌';
-                let desc = '选择下方词牌，系统会自动显示该词牌的平仄格式和押韵要求。';
-                
-                if (this.currentLetter !== 'all') {
-                    const count = this.cipaiByLetter[this.currentLetter]?.length || 0;
-                    if (this.currentLetter === '#') {
-                        title = `其他词牌 (${count}个)`;
-                        desc = `非字母开头的词牌，共 ${count} 个。`;
+                if (this.searchQuery) {
+                    const searchGroup = document.querySelector('.letter-group[data-letter="search"]');
+                    if (searchGroup) {
+                        const resultCount = searchGroup.querySelector('.cipai-selector').children.length;
+                        resultsInfo.textContent = `搜索"${this.searchQuery}"找到 ${resultCount} 个词牌`;
+                        resultsInfo.style.display = 'block';
                     } else {
-                        title = `${this.currentLetter} 开头的词牌 (${count}个)`;
-                        desc = `拼音首字母为 ${this.currentLetter} 的词牌，共 ${count} 个。`;
+                        resultsInfo.textContent = `搜索"${this.searchQuery}"未找到相关词牌`;
+                        resultsInfo.style.display = 'block';
+                    }
+                } else {
+                    resultsInfo.style.display = 'none';
+                }
+            }
+
+            selectCipai(cipai) {
+                this.currentCipai = cipai;
+                this.originalFormat = cipai.format;
+                this.rhymeGroups = cipai.rhymeGroups || [];
+                this.groupVowels = {}; // 清空韵母记录
+                
+                // 分析文本
+                const analysis = this.analyzeText(cipai.format);
+                this.slotIndices = analysis.slotIndices;
+                
+                // 检查平仄数组长度是否匹配
+                if (cipai.tones.length < analysis.slotCount) {
+                    while (cipai.tones.length < analysis.slotCount) {
+                        cipai.tones.push('平');
                     }
                 }
                 
-                titleElement.textContent = title;
-                descElement.textContent = desc;
+                // 初始化用户输入数组和拼音信息数组
+                this.chars = Array(analysis.slotCount).fill('');
+                this.pinyinInfos = Array(analysis.slotCount).fill(null);
+                this.activeSlotIndex = 0;
+                
+                // 更新UI
+                this.updateCipaiSelectorUI(cipai.id);
+                this.createTextDisplay();
+                this.updateDisplay();
+                this.updateRhymePanel();
+                this.updateExampleSection();
+                this.focusHiddenInput();
+            }
+
+            updateCipaiSelectorUI(selectedId) {
+                // 更新所有词牌卡片状态
+                document.querySelectorAll('.cipai-card').forEach(card => {
+                    if (card.dataset.cipaiId === selectedId) {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
             }
 
             // 分析文本，分离文字和标点
@@ -1679,46 +1811,6 @@
                     slotCount: slotIndices.length,
                     punctuationCount: punctuationIndices.length + spaceIndices.length
                 };
-            }
-
-            selectCipai(cipai) {
-                this.currentCipai = cipai;
-                this.originalFormat = cipai.format;
-                this.rhymeGroups = cipai.rhymeGroups || [];
-                this.groupVowels = {}; // 清空韵母记录
-                
-                // 分析文本
-                const analysis = this.analyzeText(cipai.format);
-                this.slotIndices = analysis.slotIndices;
-                
-                // 检查平仄数组长度是否匹配
-                if (cipai.tones.length < analysis.slotCount) {
-                    while (cipai.tones.length < analysis.slotCount) {
-                        cipai.tones.push('平');
-                    }
-                }
-                
-                // 初始化用户输入数组和拼音信息数组
-                this.chars = Array(analysis.slotCount).fill('');
-                this.pinyinInfos = Array(analysis.slotCount).fill(null);
-                this.activeSlotIndex = 0;
-                
-                // 更新UI
-                this.updateCipaiCardUI(cipai.id);
-                this.createTextDisplay();
-                this.updateDisplay();
-                this.updateRhymePanel();
-                this.updateExampleSection();
-                this.focusHiddenInput();
-            }
-
-            updateCipaiCardUI(selectedId) {
-                document.querySelectorAll('.cipai-card').forEach(card => {
-                    card.classList.remove('active');
-                    if (card.dataset.cipaiId === selectedId) {
-                        card.classList.add('active');
-                    }
-                });
             }
 
             // 更新示例展示区域
@@ -2250,6 +2342,14 @@
                     this.focusHiddenInput();
                 });
 
+                // 搜索输入事件
+                const searchInput = document.getElementById('cipaiSearch');
+                if (searchInput) {
+                    searchInput.addEventListener('input', (e) => {
+                        this.searchCipai(e.target.value);
+                    });
+                }
+
                 // 全局键盘事件
                 document.addEventListener('keydown', (e) => {
                     if (!e.target.matches('input, textarea') && 
@@ -2504,20 +2604,7 @@
                 // URL参数配置支持
                 const urlParams = new URLSearchParams(window.location.search);
                 const cipaiParam = urlParams.get('cipai');
-                const letterParam = urlParams.get('letter');
                 
-                // 如果有字母参数，先切换到对应字母
-                if (letterParam) {
-                    const letter = letterParam.toUpperCase();
-                    if (letter === 'ALL' || /^[A-Z#]$/.test(letter)) {
-                        ciFillAssistant.currentLetter = letter === 'ALL' ? 'all' : letter;
-                        ciFillAssistant.updateLetterNavigation();
-                        ciFillAssistant.updateCipaiDisplay();
-                        ciFillAssistant.updateCategoryText();
-                    }
-                }
-                
-                // 如果有词牌参数，选择对应词牌
                 if (cipaiParam) {
                     const cipaiConfig = cipaiConfigs.find(c => c.id === cipaiParam);
                     if (cipaiConfig) {
@@ -2525,7 +2612,7 @@
                     }
                 }
                 
-                console.log("宋词填词辅助程序加载完成！使用外部配置文件，支持字母分类");
+                console.log("宋词填词辅助程序加载完成！使用外部配置文件，支持按首字母分类");
             } catch (error) {
                 console.error("初始化失败:", error);
                 // 显示错误信息给用户
