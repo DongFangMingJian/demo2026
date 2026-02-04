@@ -886,25 +886,6 @@
             height: 0;
         }
         
-        /* 加载状态样式 */
-        .loading-message {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-color-light);
-            font-style: italic;
-            font-size: 1.1rem;
-        }
-        
-        .error-message {
-            color: var(--error-color);
-            padding: 20px;
-            text-align: center;
-            background-color: rgba(231, 76, 60, 0.1);
-            border-radius: var(--border-radius);
-            margin: 20px 0;
-            font-weight: 600;
-        }
-        
         /* ==================== 响应式设计 ==================== */
         @media (max-width: 768px) {
             header {
@@ -1068,15 +1049,12 @@
             <p>选择下方词牌，系统会自动显示该词牌的平仄格式和押韵要求。每种词牌的押韵格式都有不同标识。</p>
             
             <div class="cipai-selector" id="cipaiSelector">
-                <!-- 加载状态提示 -->
-                <div class="loading-message">
-                    <i class="fas fa-spinner fa-spin"></i> 正在加载词牌配置...
-                </div>
+                <!-- 词牌选项将通过JavaScript动态生成 -->
             </div>
         </section>
         
         <!-- 文字展示区域 -->
-        <section class="text-display" id="textDisplaySection" style="display: none;">
+        <section class="text-display">
             <h3>填词区域</h3>
             <p>点击下方槽位或直接输入文字开始填词。字母标识表示韵组，相同字母的位置需要押韵。韵脚位置会显示韵母提示。</p>
             
@@ -1095,7 +1073,7 @@
         </section>
         
         <!-- 交互区域 -->
-        <section class="input-container" id="inputContainer" style="display: none;">
+        <section class="input-container">
             <h3>操作控制</h3>
             
             <div class="controls">
@@ -1112,7 +1090,7 @@
         </section>
         
         <!-- 示例展示区域 -->
-        <section class="example-section" id="exampleSection" style="display: none;">
+        <section class="example-section" id="exampleSection">
             <div class="example-title">
                 <i class="fas fa-book-open"></i> 词牌示例
             </div>
@@ -1199,8 +1177,37 @@
         const ENGLISH_PUNCTUATIONS = [',', '.', '!', '?', ';', ':', '-', '(', ')', '[', ']', '{', '}', '"', "'", '`', '~', '@', '#', '$', '%', '^', '&', '*', '_', '+', '=', '|', '\\', '/', '<', '>'];
         const SPACE_CHAR = ' ';
 
+        // 加载外部词牌配置
+        async function loadCipaiConfig() {
+            try {
+                const response = await fetch('cipai-config.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const cipaiConfigs = await response.json();
+                return cipaiConfigs;
+            } catch (error) {
+                console.error('加载词牌配置失败:', error);
+                // 返回一个简单的默认配置，避免应用完全崩溃
+                return [
+                    {
+                        id: 'default',
+                        name: '默认词牌',
+                        description: '示例词牌',
+                        rhymeType: '平韵格',
+                        tones: ['平', '仄'],
+                        format: '示例格式',
+                        stanzas: 1,
+                        examples: [],
+                        rhymeGroups: []
+                    }
+                ];
+            }
+        }
+
         class CiFillAssistant {
-            constructor() {
+            constructor(cipaiConfigs) {
+                this.cipaiConfigs = cipaiConfigs; // 从外部加载的词牌配置
                 this.currentCipai = null;
                 this.chars = [];
                 this.pinyinInfos = [];
@@ -1211,167 +1218,18 @@
                 this.compositionText = '';
                 this.rhymeGroups = [];
                 this.groupVowels = {}; // 存储每个韵组的韵母
-                this.CIPAI_CONFIGS = []; // 初始化为空数组
                 
-                // 绑定方法到实例
-                this.showLoadingMessage = this.showLoadingMessage.bind(this);
-                this.showErrorMessage = this.showErrorMessage.bind(this);
+                this.init();
             }
 
-            async init() {
-                try {
-                    // 显示加载状态
-                    this.showLoadingMessage("正在加载词牌配置...");
-                    
-                    // 加载外部配置文件
-                    await this.loadCipaiConfig();
-                    
-                    // 绑定事件
-                    this.bindEvents();
-                    
-                    // 默认选择第一个词牌
-                    if (this.CIPAI_CONFIGS.length > 0) {
-                        this.selectCipai(this.CIPAI_CONFIGS[0]);
-                    } else {
-                        this.showErrorMessage("未加载到有效的词牌配置");
-                    }
-                } catch (error) {
-                    console.error('初始化失败:', error);
-                    this.showErrorMessage(`加载配置失败: ${error.message}`);
-                    
-                    // 使用备用配置
-                    this.CIPAI_CONFIGS = this.getFallbackConfig();
-                    if (this.CIPAI_CONFIGS.length > 0) {
-                        this.selectCipai(this.CIPAI_CONFIGS[0]);
-                        this.showErrorMessage("使用备用配置，部分功能可能受限");
-                    }
-                }
-            }
-
-            // 显示加载消息
-            showLoadingMessage(message) {
-                const selector = document.getElementById('cipaiSelector');
-                if (selector) {
-                    selector.innerHTML = `<div class="loading-message"><i class="fas fa-spinner fa-spin"></i> ${message}</div>`;
-                }
-            }
-
-            // 显示错误消息
-            showErrorMessage(message) {
-                const selector = document.getElementById('cipaiSelector');
-                if (selector) {
-                    const errorDiv = document.createElement('div');
-                    errorDiv.className = 'error-message';
-                    errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
-                    selector.appendChild(errorDiv);
-                }
-            }
-
-            async loadCipaiConfig() {
-                try {
-                    // 使用相对路径加载配置文件
-                    const response = await fetch('./cipai-config.json');
-                    
-                    if (!response.ok) {
-                        throw new Error(`HTTP错误! 状态: ${response.status}`);
-                    }
-                    
-                    const configData = await response.json();
-                    
-                    // 验证数据结构
-                    if (configData.cipai_list && Array.isArray(configData.cipai_list)) {
-                        this.CIPAI_CONFIGS = configData.cipai_list;
-                        
-                        // 验证每个词牌配置
-                        const validCipaiList = [];
-                        for (const cipai of this.CIPAI_CONFIGS) {
-                            if (this.validateCipaiConfig(cipai)) {
-                                validCipaiList.push(cipai);
-                            } else {
-                                console.warn(`词牌配置验证失败: ${cipai.name || '未知词牌'}`);
-                            }
-                        }
-                        
-                        this.CIPAI_CONFIGS = validCipaiList;
-                        
-                        if (this.CIPAI_CONFIGS.length === 0) {
-                            throw new Error('配置文件格式正确，但没有有效的词牌配置');
-                        }
-                        
-                        console.log(`成功加载 ${this.CIPAI_CONFIGS.length} 个词牌配置`);
-                        
-                        // 在控制台显示加载的词牌名
-                        const names = this.CIPAI_CONFIGS.map(c => c.name).join(', ');
-                        console.log('已加载词牌:', names);
-                        
-                        return true;
-                    } else {
-                        throw new Error('配置文件格式错误：缺少 cipai_list 数组');
-                    }
-                    
-                } catch (error) {
-                    console.error('加载词牌配置文件失败:', error);
-                    throw error; // 重新抛出错误，让上层处理
-                }
-            }
-
-            // 验证词牌配置
-            validateCipaiConfig(cipai) {
-                const requiredFields = ['id', 'name', 'description', 'rhymeType', 'tones', 'format'];
+            init() {
+                this.createCipaiSelector();
+                this.bindEvents();
                 
-                for (const field of requiredFields) {
-                    if (!cipai[field]) {
-                        console.warn(`词牌配置缺少必需字段 "${field}":`, cipai);
-                        return false;
-                    }
+                // 默认选择第一个词牌
+                if (this.cipaiConfigs && this.cipaiConfigs.length > 0) {
+                    this.selectCipai(this.cipaiConfigs[0]);
                 }
-                
-                // 验证 tones 数组长度与 format 中的汉字数量匹配
-                const chineseChars = Array.from(cipai.format).filter(char => {
-                    return char !== SPACE_CHAR && 
-                           !CHINESE_PUNCTUATIONS.includes(char) && 
-                           !ENGLISH_PUNCTUATIONS.includes(char);
-                }).length;
-                
-                if (cipai.tones.length < chineseChars) {
-                    console.warn(`词牌 "${cipai.name}" 的平仄数组长度(${cipai.tones.length})少于汉字数量(${chineseChars})`);
-                    // 可以自动补全，但这里只警告
-                }
-                
-                return true;
-            }
-
-            // 获取备用配置（当外部配置文件加载失败时使用）
-            getFallbackConfig() {
-                return [
-                    {
-                        id: 'jiang-chengzi-fallback',
-                        name: '江城子',
-                        description: '双调七十字，前后段各七句五平韵',
-                        rhymeType: '平韵格',
-                        tones: ['平', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '平', '平', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '平', '平', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平'],
-                        format: '十年生死两茫茫，不思量，自难忘。千里孤坟，无处话凄凉。纵使相逢应不识，尘满面，鬓如霜。夜来幽梦忽还乡，小轩窗，正梳妆。相顾无言，惟有泪千行。料得年年肠断处，明月夜，短松冈。',
-                        stanzas: 2,
-                        stanzaBreakIndex: 32,
-                        examples: [
-                            {
-                                title: "江城子·乙卯正月二十日夜记梦",
-                                author: "苏轼",
-                                content: "十年生死两茫茫，不思量，自难忘。千里孤坟，无处话凄凉。纵使相逢应不识，尘满面，鬓如霜。夜来幽梦忽还乡，小轩窗，正梳妆。相顾无言，惟有泪千行。料得年年肠断处，明月夜，短松冈。",
-                                rhymePositions: [6, 9, 15, 20, 27, 31, 36, 41, 46, 51],
-                                highlightPositions: [0, 3, 8, 13, 16, 21, 24, 29, 34, 39, 42, 47, 50, 53]
-                            }
-                        ],
-                        rhymeGroups: [
-                            {
-                                id: 'A',
-                                positions: [6, 9, 15, 20, 27, 31, 36, 41, 46, 51],
-                                toneType: '平',
-                                description: '全词押平韵，一韵到底'
-                            }
-                        ]
-                    }
-                ];
             }
 
             // 分析文本，分离文字和标点
@@ -1405,16 +1263,9 @@
 
             createCipaiSelector() {
                 const selector = document.getElementById('cipaiSelector');
-                if (!selector) return;
-                
                 selector.innerHTML = '';
                 
-                if (this.CIPAI_CONFIGS.length === 0) {
-                    this.showErrorMessage("没有可用的词牌配置");
-                    return;
-                }
-                
-                this.CIPAI_CONFIGS.forEach(cipai => {
+                this.cipaiConfigs.forEach(cipai => {
                     const card = document.createElement('div');
                     card.className = 'cipai-card';
                     card.dataset.cipaiId = cipai.id;
@@ -1446,7 +1297,6 @@
                 
                 // 检查平仄数组长度是否匹配
                 if (cipai.tones.length < analysis.slotCount) {
-                    console.warn(`词牌 "${cipai.name}" 平仄数组长度不足，自动补全`);
                     while (cipai.tones.length < analysis.slotCount) {
                         cipai.tones.push('平');
                     }
@@ -1464,25 +1314,6 @@
                 this.updateRhymePanel();
                 this.updateExampleSection();
                 this.focusHiddenInput();
-                
-                // 显示相关区域
-                this.showMainSections();
-            }
-
-            // 显示主要功能区域
-            showMainSections() {
-                const sections = [
-                    'textDisplaySection',
-                    'inputContainer',
-                    'exampleSection'
-                ];
-                
-                sections.forEach(id => {
-                    const element = document.getElementById(id);
-                    if (element) {
-                        element.style.display = 'block';
-                    }
-                });
             }
 
             updateCipaiSelectorUI(selectedId) {
@@ -2265,31 +2096,42 @@
             // 初始化暗色模式
             initDarkMode();
             
-            // 创建填词助手实例
-            const ciFillAssistant = new CiFillAssistant();
-            
-            // 初始化助手（会加载外部配置）
-            await ciFillAssistant.init();
-            
-            // 公开实例以便调试
-            window.ciFillAssistant = ciFillAssistant;
-            
-            // URL参数配置支持
-            const urlParams = new URLSearchParams(window.location.search);
-            const cipaiParam = urlParams.get('cipai');
-            
-            // 延迟处理URL参数，确保配置已加载
-            setTimeout(() => {
-                if (cipaiParam && ciFillAssistant.CIPAI_CONFIGS) {
-                    const cipaiConfig = ciFillAssistant.CIPAI_CONFIGS.find(c => c.id === cipaiParam);
+            try {
+                // 加载词牌配置
+                const cipaiConfigs = await loadCipaiConfig();
+                
+                // 初始化填词辅助程序
+                const ciFillAssistant = new CiFillAssistant(cipaiConfigs);
+                
+                // 公开实例以便调试
+                window.ciFillAssistant = ciFillAssistant;
+                
+                // URL参数配置支持
+                const urlParams = new URLSearchParams(window.location.search);
+                const cipaiParam = urlParams.get('cipai');
+                
+                if (cipaiParam) {
+                    const cipaiConfig = cipaiConfigs.find(c => c.id === cipaiParam);
                     if (cipaiConfig) {
                         ciFillAssistant.selectCipai(cipaiConfig);
                     }
                 }
-            }, 100);
-            
-            console.log("宋词填词辅助程序初始化完成！");
-            console.log("当前词牌数:", ciFillAssistant.CIPAI_CONFIGS.length);
+                
+                console.log("宋词填词辅助程序加载完成！使用外部配置文件");
+            } catch (error) {
+                console.error("初始化失败:", error);
+                // 显示错误信息给用户
+                const textDisplay = document.getElementById('textDisplay');
+                if (textDisplay) {
+                    textDisplay.innerHTML = `
+                        <div style="padding: 40px; text-align: center; color: var(--error-color);">
+                            <h3>加载词牌配置失败</h3>
+                            <p>请检查 cipai-config.json 文件是否存在且格式正确</p>
+                            <p>错误信息: ${error.message}</p>
+                        </div>
+                    `;
+                }
+            }
         });
     </script>
 </body>
