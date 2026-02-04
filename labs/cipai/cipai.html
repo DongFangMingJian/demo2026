@@ -1,0 +1,2296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>宋词填词辅助程序 | 古典诗词创作工具</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/pinyin-pro"></script>
+    <style>
+        /* ==================== 全局样式变量 ==================== */
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cbc;
+            --accent-color: #ff7e5f;
+            --error-color: #e74c3c;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --text-color: #333;
+            --text-color-light: #666;
+            --bg-color: #f9f9f9;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --border-color: rgba(74, 111, 165, 0.2);
+            
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+            --shadow-elevation: 0 8px 20px var(--shadow-color);
+            --shadow-hover: 0 15px 30px var(--shadow-color);
+            
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            --font-size-base: 16px;
+            --font-size-large: 1.5rem;
+            --font-size-xlarge: 2rem;
+            --font-size-small: 0.85rem;
+            --line-height: 1.6;
+        }
+        
+        .dark-mode {
+            --primary-color: #6b8cbc;
+            --secondary-color: #4a6fa5;
+            --accent-color: #ff9e80;
+            --error-color: #e57373;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --text-color: #f0f0f0;
+            --text-color-light: #aaa;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --border-color: rgba(74, 111, 165, 0.4);
+        }
+        
+        /* ==================== 基础样式 ==================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: var(--transition);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* ==================== 头部样式 ==================== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--secondary-color);
+        }
+        
+        .logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            color: var(--primary-color);
+        }
+        
+        .logo h1 {
+            font-size: 1.8rem;
+            margin-left: 10px;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+        }
+        
+        .nav-controls {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin-right: 30px;
+        }
+        
+        .nav-links li {
+            margin-left: 25px;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary-color);
+            background-color: rgba(74, 111, 165, 0.1);
+        }
+        
+        .nav-links a.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+        
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+        
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+        
+        .theme-switch input {
+            display: none;
+        }
+        
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: var(--transition);
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: var(--transition);
+            width: 26px;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .theme-label {
+            margin-left: 10px;
+            font-weight: 600;
+        }
+        
+        /* ==================== 页面头部 ==================== */
+        .page-header {
+            text-align: center;
+            padding: 40px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(74, 111, 165, 0.2);
+        }
+        
+        .page-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        /* ==================== 词牌选择 ==================== */
+        .cipai-section {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow-elevation);
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
+        
+        .cipai-section:hover {
+            box-shadow: var(--shadow-hover);
+        }
+        
+        .cipai-selector {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .cipai-card {
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cipai-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+            box-shadow: 0 10px 20px var(--shadow-color);
+        }
+        
+        .cipai-card.active {
+            border-color: var(--primary-color);
+            background-color: rgba(74, 111, 165, 0.1);
+        }
+        
+        .cipai-card.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+        }
+        
+        .cipai-title {
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+        
+        .cipai-stats {
+            font-size: 0.9rem;
+            color: var(--text-color-light);
+            margin-bottom: 5px;
+        }
+        
+        .cipai-rhyme-type {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+            background-color: rgba(255, 126, 95, 0.1);
+            padding: 3px 8px;
+            border-radius: 12px;
+            display: inline-block;
+            margin: 5px 0;
+        }
+        
+        .cipai-format {
+            font-size: 0.95rem;
+            color: var(--text-color-light);
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        /* ==================== 文字展示区域 ==================== */
+        .text-display {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow-elevation);
+            margin-bottom: 30px;
+            text-align: center;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .sentence-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 15px;
+            min-height: 200px;
+        }
+        
+        .stanza-break {
+            width: 100%;
+            height: 40px;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .stanza-break::before {
+            content: '';
+            position: absolute;
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+            border-radius: 1px;
+        }
+        
+        .slot-wrapper {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            vertical-align: middle;
+            position: relative;
+            margin: 5px;
+        }
+        
+        /* 韵组标识 */
+        .rhyme-group {
+            font-size: 0.7rem;
+            color: white;
+            background-color: var(--primary-color);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -8px;
+            left: -8px;
+            z-index: 2;
+            font-weight: bold;
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+        
+        /* 平仄提示 */
+        .tone-hint {
+            font-size: 0.9rem;
+            color: var(--text-color-light);
+            height: 1.5rem;
+            text-align: center;
+            width: 100%;
+            font-weight: 600;
+            margin-bottom: 5px;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background-color: rgba(74, 111, 165, 0.1);
+            transition: var(--transition);
+        }
+        
+        .tone-hint.ping {
+            color: var(--success-color);
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+        
+        .tone-hint.ze {
+            color: var(--error-color);
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+        
+        .tone-hint.zhong {
+            color: var(--warning-color);
+            background-color: rgba(243, 156, 18, 0.1);
+        }
+        
+        /* 拼音显示区域 */
+        .pinyin-display {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            height: 1.5rem;
+            text-align: center;
+            width: 100%;
+            margin-bottom: 5px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            position: relative;
+        }
+        
+        .pinyin-display.error {
+            color: var(--error-color);
+        }
+        
+        .pinyin-display.correct {
+            color: var(--success-color);
+        }
+        
+        /* 韵母提示 */
+        .rhyme-hint {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 5px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px var(--shadow-color);
+            z-index: 1;
+            display: none;
+        }
+        
+        .rhyme-hint.show {
+            display: block;
+        }
+        
+        /* 多音字切换图标 */
+        .polyphone-toggle {
+            cursor: pointer;
+            color: var(--accent-color);
+            font-size: 0.8rem;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background-color: rgba(255, 126, 95, 0.1);
+        }
+        
+        .polyphone-toggle:hover {
+            background-color: var(--accent-color);
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        .polyphone-toggle:active {
+            transform: scale(0.95);
+        }
+        
+        /* 当前读音指示器 */
+        .pinyin-index {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent-color);
+            color: white;
+            font-size: 0.6rem;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            box-shadow: 0 2px 4px var(--shadow-color);
+        }
+        
+        /* 输入槽位 */
+        .slot {
+            width: 65px;
+            height: 75px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--border-color);
+            font-size: 2.2rem;
+            font-weight: 500;
+            color: var(--text-color);
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+            user-select: none;
+            margin-top: 0.2rem;
+            background-color: var(--bg-color);
+            border-radius: 8px;
+            font-family: "Noto Serif SC", "Source Han Serif SC", "Source Han Serif", serif;
+        }
+        
+        .slot:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--shadow-color);
+        }
+        
+        .slot.active {
+            border-color: var(--primary-color);
+            background-color: rgba(74, 111, 165, 0.1);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+        
+        .slot.has-content {
+            border-color: var(--success-color);
+            background-color: rgba(46, 204, 113, 0.1);
+        }
+        
+        .slot.error {
+            border-color: var(--error-color);
+            background-color: rgba(231, 76, 60, 0.1);
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-3px); }
+            20%, 40%, 60%, 80% { transform: translateX(3px); }
+        }
+        
+        .slot.cursor::after {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 1.5rem;
+            background-color: var(--primary-color);
+            animation: blink 1s infinite;
+            border-radius: 2px;
+        }
+        
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        
+        /* 标点符号样式 */
+        .punctuation {
+            display: inline-block;
+            font-size: 2.2rem;
+            color: var(--text-color-light);
+            margin: 0 5px;
+            min-width: 20px;
+            text-align: center;
+            line-height: 75px;
+            font-family: "Noto Serif SC", "Source Han Serif SC", "Source Han Serif", serif;
+        }
+        
+        .punctuation-space {
+            display: inline-block;
+            min-width: 40px;
+        }
+        
+        /* ==================== 交互区域 ==================== */
+        .input-container {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow-elevation);
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
+        
+        /* 按钮样式 */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            min-width: 150px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px var(--shadow-color);
+        }
+        
+        .btn-secondary {
+            background-color: rgba(74, 111, 165, 0.1);
+            color: var(--primary-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-accent {
+            background-color: var(--accent-color);
+            color: white;
+        }
+        
+        .btn-accent:hover {
+            background-color: #ff6b47;
+            transform: scale(1.05);
+        }
+        
+        /* ==================== 韵组信息面板 ==================== */
+        .rhyme-panel {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-elevation);
+            margin-top: 20px;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .rhyme-group-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .rhyme-group-item {
+            background-color: var(--bg-color);
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            border: 2px solid var(--primary-color);
+            min-width: 120px;
+        }
+        
+        .rhyme-group-title {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .rhyme-group-title::before {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+        
+        .rhyme-group-vowel {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin: 5px 0;
+        }
+        
+        .rhyme-group-status {
+            font-size: 0.8rem;
+            color: var(--text-color-light);
+        }
+        
+        /* ==================== 示例展示区域 ==================== */
+        .example-section {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow-elevation);
+            margin-bottom: 30px;
+            transition: var(--transition);
+        }
+        
+        .example-title {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .example-title i {
+            color: var(--accent-color);
+        }
+        
+        .example-container {
+            margin-top: 20px;
+        }
+        
+        .example-content {
+            font-size: 1.4rem;
+            line-height: 2;
+            color: var(--text-color);
+            text-align: center;
+            font-family: "Noto Serif SC", "Source Han Serif SC", "Source Han Serif", serif;
+            padding: 20px;
+            background-color: rgba(74, 111, 165, 0.05);
+            border-radius: var(--border-radius);
+            border: 2px solid var(--border-color);
+            position: relative;
+        }
+        
+        .example-content .stanza-break {
+            height: 30px;
+            margin: 15px 0;
+        }
+        
+        .example-content .stanza-break::before {
+            width: 60%;
+        }
+        
+        .example-character {
+            display: inline-block;
+            min-width: 2.5rem;
+            text-align: center;
+            margin: 0 2px;
+            position: relative;
+        }
+        
+        .example-character.highlight {
+            color: var(--accent-color);
+            font-weight: bold;
+            position: relative;
+        }
+        
+        .example-character.highlight::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 3px;
+            background-color: var(--accent-color);
+            border-radius: 2px;
+        }
+        
+        .example-character.rhyme {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .example-character.rhyme::before {
+            content: '韵';
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            color: var(--primary-color);
+            background-color: white;
+            padding: 1px 4px;
+            border-radius: 4px;
+            border: 1px solid var(--primary-color);
+            z-index: 1;
+        }
+        
+        .dark-mode .example-character.rhyme::before {
+            background-color: var(--card-bg);
+        }
+        
+        .example-punctuation {
+            display: inline-block;
+            min-width: 20px;
+            text-align: center;
+        }
+        
+        .example-metadata {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+            color: var(--text-color-light);
+        }
+        
+        .example-author {
+            font-style: italic;
+        }
+        
+        .example-metadata i {
+            color: var(--accent-color);
+            margin-right: 5px;
+        }
+        
+        /* ==================== 使用说明 ==================== */
+        .instructions {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: var(--shadow-elevation);
+            margin-bottom: 60px;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .instructions h3 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+        
+        .instructions p {
+            margin-bottom: 10px;
+            color: var(--text-color-light);
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+            color: var(--text-color-light);
+        }
+        
+        .instructions li {
+            margin-bottom: 8px;
+        }
+        
+        /* ==================== 页脚 ==================== */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-color-light);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(74, 111, 165, 0.2);
+        }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin-bottom: 25px;
+        }
+        
+        .footer-links li {
+            margin: 0 15px;
+        }
+        
+        .footer-links a {
+            color: var(--text-color-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+        
+        .copyright {
+            color: var(--text-color-light);
+            font-size: 0.9rem;
+        }
+        
+        /* ==================== 隐藏输入框 ==================== */
+        .hidden-input {
+            position: fixed;
+            opacity: 0;
+            pointer-events: none;
+            width: 0;
+            height: 0;
+        }
+        
+        /* 加载状态样式 */
+        .loading-message {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-color-light);
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+        
+        .error-message {
+            color: var(--error-color);
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(231, 76, 60, 0.1);
+            border-radius: var(--border-radius);
+            margin: 20px 0;
+            font-weight: 600;
+        }
+        
+        /* ==================== 响应式设计 ==================== */
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-controls {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+            
+            .nav-links {
+                margin-right: 0;
+            }
+            
+            .page-header h2 {
+                font-size: 2.2rem;
+            }
+            
+            .page-header p {
+                font-size: 1rem;
+            }
+            
+            .cipai-selector {
+                grid-template-columns: 1fr;
+            }
+            
+            .slot {
+                width: 55px;
+                height: 65px;
+                font-size: 1.8rem;
+            }
+            
+            .punctuation {
+                font-size: 1.8rem;
+                line-height: 65px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+            
+            .pinyin-display {
+                font-size: 0.8rem;
+            }
+            
+            .example-content {
+                font-size: 1.2rem;
+            }
+            
+            .example-character {
+                min-width: 2rem;
+            }
+            
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .footer-links li {
+                margin: 5px 10px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .slot {
+                width: 45px;
+                height: 55px;
+                font-size: 1.6rem;
+            }
+            
+            .punctuation {
+                font-size: 1.6rem;
+                line-height: 55px;
+            }
+            
+            .pinyin-display {
+                font-size: 0.7rem;
+            }
+            
+            .polyphone-toggle {
+                font-size: 0.7rem;
+                width: 14px;
+                height: 14px;
+            }
+            
+            .pinyin-index {
+                font-size: 0.5rem;
+                width: 14px;
+                height: 14px;
+                top: -6px;
+                right: -6px;
+            }
+            
+            .rhyme-hint {
+                font-size: 0.5rem;
+                padding: 1px 3px;
+                top: -8px;
+                right: -8px;
+            }
+            
+            .example-content {
+                font-size: 1.1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                margin-bottom: 15px;
+            }
+            
+            .nav-links li {
+                margin: 5px 10px 5px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 - 完整的导航栏 -->
+        <header>
+            <div class="logo">
+                <a href="#">
+                    <i class="fas fa-feather-alt logo-icon"></i>
+                    <h1>宋词填词辅助程序</h1>
+                </a>
+            </div>
+            <div class="nav-controls">
+                <ul class="nav-links">
+                    <li><a href="#">个人门户</a></li>
+                    <li><a href="#">实验室</a></li>
+                    <li><a href="#" class="active">词牌填词</a></li>
+                </ul>
+                <div class="theme-switch-wrapper">
+                    <label class="theme-switch" for="checkbox">
+                        <input type="checkbox" id="checkbox" />
+                        <div class="slider"></div>
+                    </label>
+                    <div class="theme-label">夜间模式</div>
+                </div>
+            </div>
+        </header>
+
+        <!-- 页面头部 -->
+        <section class="page-header">
+            <h2>宋词填词辅助程序</h2>
+            <p>支持平仄校验与押韵辅助，为您创作古典诗词提供专业工具</p>
+        </section>
+
+        <!-- 词牌选择 -->
+        <section class="cipai-section">
+            <h3>选择词牌</h3>
+            <p>选择下方词牌，系统会自动显示该词牌的平仄格式和押韵要求。每种词牌的押韵格式都有不同标识。</p>
+            
+            <div class="cipai-selector" id="cipaiSelector">
+                <!-- 加载状态提示 -->
+                <div class="loading-message">
+                    <i class="fas fa-spinner fa-spin"></i> 正在加载词牌配置...
+                </div>
+            </div>
+        </section>
+        
+        <!-- 文字展示区域 -->
+        <section class="text-display" id="textDisplaySection" style="display: none;">
+            <h3>填词区域</h3>
+            <p>点击下方槽位或直接输入文字开始填词。字母标识表示韵组，相同字母的位置需要押韵。韵脚位置会显示韵母提示。</p>
+            
+            <div class="sentence-container" id="textDisplay">
+                <!-- 这里将显示完整的句子，包含槽位和标点符号 -->
+            </div>
+            
+            <!-- 韵组信息面板 -->
+            <div class="rhyme-panel" id="rhymePanel">
+                <h4>韵组信息</h4>
+                <p>每个韵组的韵母会在该组第一个字输入后确定。同组其他字必须使用相同韵母。</p>
+                <div class="rhyme-group-info" id="rhymeGroupInfo">
+                    <!-- 韵组信息将在这里动态显示 -->
+                </div>
+            </div>
+        </section>
+        
+        <!-- 交互区域 -->
+        <section class="input-container" id="inputContainer" style="display: none;">
+            <h3>操作控制</h3>
+            
+            <div class="controls">
+                <button class="btn btn-primary" id="pasteBtn">
+                    <i class="fas fa-paste"></i> 粘贴文字
+                </button>
+                <button class="btn btn-secondary" id="clearBtn">
+                    <i class="fas fa-broom"></i> 清空所有
+                </button>
+                <button class="btn btn-accent" id="focusBtn">
+                    <i class="fas fa-keyboard"></i> 聚焦输入
+                </button>
+            </div>
+        </section>
+        
+        <!-- 示例展示区域 -->
+        <section class="example-section" id="exampleSection" style="display: none;">
+            <div class="example-title">
+                <i class="fas fa-book-open"></i> 词牌示例
+            </div>
+            <p>欣赏经典作品，获取创作灵感。以下为当前词牌的经典作品示例：</p>
+            
+            <div class="example-container" id="exampleContainer">
+                <!-- 示例将通过JavaScript动态生成 -->
+            </div>
+        </section>
+        
+        <!-- 使用说明 -->
+        <section class="instructions">
+            <h3>使用说明</h3>
+            <p>1. 选择词牌：点击词牌卡片选择要填写的词牌，系统会自动显示该词牌的完整格式。</p>
+            <p>2. 韵组标识：字母标识表示韵组，相同字母的位置需要押韵（使用相同韵母）。</p>
+            <p>3. 押韵提示：韵脚位置会显示韵母提示，输入第一个韵字后，同组其他位置会显示该韵母。</p>
+            <p>4. 平仄标识：绿色"平"表示平声，红色"仄"表示仄声，橙色"中"表示可平可仄。</p>
+            <p>5. 多音字处理：多音字有切换图标，点击可以循环切换不同读音并重新校验平仄和押韵。</p>
+            <p>6. 错误提示：如果声调或押韵不符合要求，槽位背景会变红提示并轻微抖动。</p>
+            <p>7. 操作按钮：使用粘贴、清空、聚焦按钮辅助填词。</p>
+            <p>8. 夜间模式：点击右上角开关切换夜间模式，保护眼睛并提供更好的夜间浏览体验。</p>
+        </section>
+        
+        <!-- 页脚 - 完整的页脚链接 -->
+        <footer>
+            <div class="footer-content">
+                <ul class="footer-links">
+                    <li><a href="#">个人门户</a></li>
+                </ul>
+                <p class="copyright">© 2023 宋词填词辅助程序 | 基于平仄校验的古典诗词创作工具，支持完整押韵系统</p>
+                <p class="copyright">最后更新: <span id="current-date"></span> | 版本: 1.0.0</p>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- 隐藏的真实输入框 -->
+    <input type="text" class="hidden-input" id="hiddenInput">
+
+    <script>
+        // 设置当前日期
+        function setCurrentDate() {
+            const currentDateElement = document.getElementById('current-date');
+            if (currentDateElement) {
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                currentDateElement.textContent = now.toLocaleDateString('zh-CN', options);
+            }
+        }
+        
+        // 初始化暗色模式
+        function initDarkMode() {
+            const checkbox = document.getElementById('checkbox');
+            const savedDarkMode = localStorage.getItem('darkMode') === 'true';
+            
+            // 加载保存的暗色模式设置
+            if (savedDarkMode) {
+                document.body.classList.add('dark-mode');
+                if (checkbox) checkbox.checked = true;
+            }
+            
+            // 监听暗色模式切换
+            if (checkbox) {
+                checkbox.addEventListener('change', function() {
+                    document.body.classList.toggle('dark-mode');
+                    const isDarkMode = document.body.classList.contains('dark-mode');
+                    localStorage.setItem('darkMode', isDarkMode);
+                });
+            }
+            
+            // 监听系统暗色模式
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                if (!localStorage.getItem('darkMode')) {
+                    document.body.classList.add('dark-mode');
+                    if (checkbox) checkbox.checked = true;
+                }
+            }
+        }
+        
+        // 从 pinyin-pro 库中提取 pinyin 函数
+        const { pinyin } = window.pinyinPro;
+        
+        // 中文标点符号列表
+        const CHINESE_PUNCTUATIONS = ['，', '。', '！', '？', '；', '：', '、', '「', '」', '『', '』', '（', '）', '《', '》', '【', '】', '—', '～', '·'];
+        const ENGLISH_PUNCTUATIONS = [',', '.', '!', '?', ';', ':', '-', '(', ')', '[', ']', '{', '}', '"', "'", '`', '~', '@', '#', '$', '%', '^', '&', '*', '_', '+', '=', '|', '\\', '/', '<', '>'];
+        const SPACE_CHAR = ' ';
+
+        class CiFillAssistant {
+            constructor() {
+                this.currentCipai = null;
+                this.chars = [];
+                this.pinyinInfos = [];
+                this.slotIndices = [];
+                this.originalFormat = '';
+                this.activeSlotIndex = 0;
+                this.isComposing = false;
+                this.compositionText = '';
+                this.rhymeGroups = [];
+                this.groupVowels = {}; // 存储每个韵组的韵母
+                this.CIPAI_CONFIGS = []; // 初始化为空数组
+                
+                // 绑定方法到实例
+                this.showLoadingMessage = this.showLoadingMessage.bind(this);
+                this.showErrorMessage = this.showErrorMessage.bind(this);
+            }
+
+            async init() {
+                try {
+                    // 显示加载状态
+                    this.showLoadingMessage("正在加载词牌配置...");
+                    
+                    // 加载外部配置文件
+                    await this.loadCipaiConfig();
+                    
+                    // 绑定事件
+                    this.bindEvents();
+                    
+                    // 默认选择第一个词牌
+                    if (this.CIPAI_CONFIGS.length > 0) {
+                        this.selectCipai(this.CIPAI_CONFIGS[0]);
+                    } else {
+                        this.showErrorMessage("未加载到有效的词牌配置");
+                    }
+                } catch (error) {
+                    console.error('初始化失败:', error);
+                    this.showErrorMessage(`加载配置失败: ${error.message}`);
+                    
+                    // 使用备用配置
+                    this.CIPAI_CONFIGS = this.getFallbackConfig();
+                    if (this.CIPAI_CONFIGS.length > 0) {
+                        this.selectCipai(this.CIPAI_CONFIGS[0]);
+                        this.showErrorMessage("使用备用配置，部分功能可能受限");
+                    }
+                }
+            }
+
+            // 显示加载消息
+            showLoadingMessage(message) {
+                const selector = document.getElementById('cipaiSelector');
+                if (selector) {
+                    selector.innerHTML = `<div class="loading-message"><i class="fas fa-spinner fa-spin"></i> ${message}</div>`;
+                }
+            }
+
+            // 显示错误消息
+            showErrorMessage(message) {
+                const selector = document.getElementById('cipaiSelector');
+                if (selector) {
+                    const errorDiv = document.createElement('div');
+                    errorDiv.className = 'error-message';
+                    errorDiv.innerHTML = `<i class="fas fa-exclamation-triangle"></i> ${message}`;
+                    selector.appendChild(errorDiv);
+                }
+            }
+
+            async loadCipaiConfig() {
+                try {
+                    // 使用相对路径加载配置文件
+                    const response = await fetch('./cipai-config.json');
+                    
+                    if (!response.ok) {
+                        throw new Error(`HTTP错误! 状态: ${response.status}`);
+                    }
+                    
+                    const configData = await response.json();
+                    
+                    // 验证数据结构
+                    if (configData.cipai_list && Array.isArray(configData.cipai_list)) {
+                        this.CIPAI_CONFIGS = configData.cipai_list;
+                        
+                        // 验证每个词牌配置
+                        const validCipaiList = [];
+                        for (const cipai of this.CIPAI_CONFIGS) {
+                            if (this.validateCipaiConfig(cipai)) {
+                                validCipaiList.push(cipai);
+                            } else {
+                                console.warn(`词牌配置验证失败: ${cipai.name || '未知词牌'}`);
+                            }
+                        }
+                        
+                        this.CIPAI_CONFIGS = validCipaiList;
+                        
+                        if (this.CIPAI_CONFIGS.length === 0) {
+                            throw new Error('配置文件格式正确，但没有有效的词牌配置');
+                        }
+                        
+                        console.log(`成功加载 ${this.CIPAI_CONFIGS.length} 个词牌配置`);
+                        
+                        // 在控制台显示加载的词牌名
+                        const names = this.CIPAI_CONFIGS.map(c => c.name).join(', ');
+                        console.log('已加载词牌:', names);
+                        
+                        return true;
+                    } else {
+                        throw new Error('配置文件格式错误：缺少 cipai_list 数组');
+                    }
+                    
+                } catch (error) {
+                    console.error('加载词牌配置文件失败:', error);
+                    throw error; // 重新抛出错误，让上层处理
+                }
+            }
+
+            // 验证词牌配置
+            validateCipaiConfig(cipai) {
+                const requiredFields = ['id', 'name', 'description', 'rhymeType', 'tones', 'format'];
+                
+                for (const field of requiredFields) {
+                    if (!cipai[field]) {
+                        console.warn(`词牌配置缺少必需字段 "${field}":`, cipai);
+                        return false;
+                    }
+                }
+                
+                // 验证 tones 数组长度与 format 中的汉字数量匹配
+                const chineseChars = Array.from(cipai.format).filter(char => {
+                    return char !== SPACE_CHAR && 
+                           !CHINESE_PUNCTUATIONS.includes(char) && 
+                           !ENGLISH_PUNCTUATIONS.includes(char);
+                }).length;
+                
+                if (cipai.tones.length < chineseChars) {
+                    console.warn(`词牌 "${cipai.name}" 的平仄数组长度(${cipai.tones.length})少于汉字数量(${chineseChars})`);
+                    // 可以自动补全，但这里只警告
+                }
+                
+                return true;
+            }
+
+            // 获取备用配置（当外部配置文件加载失败时使用）
+            getFallbackConfig() {
+                return [
+                    {
+                        id: 'jiang-chengzi-fallback',
+                        name: '江城子',
+                        description: '双调七十字，前后段各七句五平韵',
+                        rhymeType: '平韵格',
+                        tones: ['平', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '平', '平', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '平', '平', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平', '仄', '仄', '平', '平'],
+                        format: '十年生死两茫茫，不思量，自难忘。千里孤坟，无处话凄凉。纵使相逢应不识，尘满面，鬓如霜。夜来幽梦忽还乡，小轩窗，正梳妆。相顾无言，惟有泪千行。料得年年肠断处，明月夜，短松冈。',
+                        stanzas: 2,
+                        stanzaBreakIndex: 32,
+                        examples: [
+                            {
+                                title: "江城子·乙卯正月二十日夜记梦",
+                                author: "苏轼",
+                                content: "十年生死两茫茫，不思量，自难忘。千里孤坟，无处话凄凉。纵使相逢应不识，尘满面，鬓如霜。夜来幽梦忽还乡，小轩窗，正梳妆。相顾无言，惟有泪千行。料得年年肠断处，明月夜，短松冈。",
+                                rhymePositions: [6, 9, 15, 20, 27, 31, 36, 41, 46, 51],
+                                highlightPositions: [0, 3, 8, 13, 16, 21, 24, 29, 34, 39, 42, 47, 50, 53]
+                            }
+                        ],
+                        rhymeGroups: [
+                            {
+                                id: 'A',
+                                positions: [6, 9, 15, 20, 27, 31, 36, 41, 46, 51],
+                                toneType: '平',
+                                description: '全词押平韵，一韵到底'
+                            }
+                        ]
+                    }
+                ];
+            }
+
+            // 分析文本，分离文字和标点
+            analyzeText(text) {
+                const chars = Array.from(text);
+                const slotIndices = [];
+                const punctuationIndices = [];
+                const spaceIndices = [];
+                
+                const allPunctuations = [...CHINESE_PUNCTUATIONS, ...ENGLISH_PUNCTUATIONS];
+                
+                chars.forEach((char, index) => {
+                    if (char === SPACE_CHAR) {
+                        spaceIndices.push(index);
+                    } else if (allPunctuations.includes(char)) {
+                        punctuationIndices.push(index);
+                    } else {
+                        slotIndices.push(index);
+                    }
+                });
+                
+                return {
+                    chars,
+                    slotIndices,
+                    punctuationIndices,
+                    spaceIndices,
+                    slotCount: slotIndices.length,
+                    punctuationCount: punctuationIndices.length + spaceIndices.length
+                };
+            }
+
+            createCipaiSelector() {
+                const selector = document.getElementById('cipaiSelector');
+                if (!selector) return;
+                
+                selector.innerHTML = '';
+                
+                if (this.CIPAI_CONFIGS.length === 0) {
+                    this.showErrorMessage("没有可用的词牌配置");
+                    return;
+                }
+                
+                this.CIPAI_CONFIGS.forEach(cipai => {
+                    const card = document.createElement('div');
+                    card.className = 'cipai-card';
+                    card.dataset.cipaiId = cipai.id;
+                    
+                    card.innerHTML = `
+                        <div class="cipai-title">${cipai.name}</div>
+                        <div class="cipai-stats">${cipai.description}</div>
+                        <div class="cipai-rhyme-type">${cipai.rhymeType}</div>
+                        <div class="cipai-format">${cipai.format}</div>
+                    `;
+                    
+                    card.addEventListener('click', () => {
+                        this.selectCipai(cipai);
+                    });
+                    
+                    selector.appendChild(card);
+                });
+            }
+
+            selectCipai(cipai) {
+                this.currentCipai = cipai;
+                this.originalFormat = cipai.format;
+                this.rhymeGroups = cipai.rhymeGroups || [];
+                this.groupVowels = {}; // 清空韵母记录
+                
+                // 分析文本
+                const analysis = this.analyzeText(cipai.format);
+                this.slotIndices = analysis.slotIndices;
+                
+                // 检查平仄数组长度是否匹配
+                if (cipai.tones.length < analysis.slotCount) {
+                    console.warn(`词牌 "${cipai.name}" 平仄数组长度不足，自动补全`);
+                    while (cipai.tones.length < analysis.slotCount) {
+                        cipai.tones.push('平');
+                    }
+                }
+                
+                // 初始化用户输入数组和拼音信息数组
+                this.chars = Array(analysis.slotCount).fill('');
+                this.pinyinInfos = Array(analysis.slotCount).fill(null);
+                this.activeSlotIndex = 0;
+                
+                // 更新UI
+                this.updateCipaiSelectorUI(cipai.id);
+                this.createTextDisplay();
+                this.updateDisplay();
+                this.updateRhymePanel();
+                this.updateExampleSection();
+                this.focusHiddenInput();
+                
+                // 显示相关区域
+                this.showMainSections();
+            }
+
+            // 显示主要功能区域
+            showMainSections() {
+                const sections = [
+                    'textDisplaySection',
+                    'inputContainer',
+                    'exampleSection'
+                ];
+                
+                sections.forEach(id => {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.style.display = 'block';
+                    }
+                });
+            }
+
+            updateCipaiSelectorUI(selectedId) {
+                document.querySelectorAll('.cipai-card').forEach(card => {
+                    if (card.dataset.cipaiId === selectedId) {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
+            }
+
+            // 更新示例展示区域
+            updateExampleSection() {
+                const exampleContainer = document.getElementById('exampleContainer');
+                if (!exampleContainer || !this.currentCipai || !this.currentCipai.examples) return;
+                
+                exampleContainer.innerHTML = '';
+                
+                this.currentCipai.examples.forEach((example, index) => {
+                    const exampleWrapper = document.createElement('div');
+                    exampleWrapper.className = 'example-item';
+                    
+                    // 解析示例文本
+                    const exampleText = example.content;
+                    const exampleChars = Array.from(exampleText);
+                    
+                    // 创建示例内容
+                    const exampleContent = document.createElement('div');
+                    exampleContent.className = 'example-content';
+                    
+                    // 获取槽位索引映射
+                    const exampleSlotIndices = [];
+                    const allPunctuations = [...CHINESE_PUNCTUATIONS, ...ENGLISH_PUNCTUATIONS];
+                    
+                    exampleChars.forEach((char, idx) => {
+                        if (char !== SPACE_CHAR && !allPunctuations.includes(char)) {
+                            exampleSlotIndices.push(idx);
+                        }
+                    });
+                    
+                    // 获取每个字符在槽位中的索引
+                    const charToSlotIndex = new Map();
+                    exampleSlotIndices.forEach((charIdx, slotIdx) => {
+                        charToSlotIndex.set(charIdx, slotIdx);
+                    });
+                    
+                    // 渲染示例文本，突出显示韵脚和关键位置
+                    let currentLine = document.createElement('div');
+                    exampleContent.appendChild(currentLine);
+                    
+                    exampleChars.forEach((char, charIdx) => {
+                        if (char === SPACE_CHAR) {
+                            // 空格
+                            const space = document.createElement('span');
+                            space.className = 'punctuation-space';
+                            space.innerHTML = '&nbsp;&nbsp;';
+                            currentLine.appendChild(space);
+                        } else if (allPunctuations.includes(char)) {
+                            // 标点符号
+                            const punctuation = document.createElement('span');
+                            punctuation.className = 'example-punctuation';
+                            punctuation.textContent = char;
+                            currentLine.appendChild(punctuation);
+                            
+                            // 如果是句号，检查是否需要添加阕间分隔
+                            if (char === '。' && this.currentCipai.stanzas > 1) {
+                                const slotIndex = charToSlotIndex.get(charIdx - 1);
+                                if (slotIndex === this.currentCipai.stanzaBreakIndex) {
+                                    // 添加阕间分隔
+                                    const stanzaBreak = document.createElement('div');
+                                    stanzaBreak.className = 'stanza-break';
+                                    exampleContent.appendChild(stanzaBreak);
+                                    
+                                    // 开始新的一行
+                                    currentLine = document.createElement('div');
+                                    exampleContent.appendChild(currentLine);
+                                }
+                            }
+                        } else {
+                            // 汉字
+                            const slotIndex = charToSlotIndex.get(charIdx);
+                            const charSpan = document.createElement('span');
+                            charSpan.className = 'example-character';
+                            charSpan.textContent = char;
+                            
+                            // 检查是否是韵脚
+                            if (example.rhymePositions && example.rhymePositions.includes(slotIndex)) {
+                                charSpan.classList.add('rhyme');
+                            }
+                            
+                            // 检查是否是需要突出显示的位置（可平可仄或关键位置）
+                            if (example.highlightPositions && example.highlightPositions.includes(slotIndex)) {
+                                charSpan.classList.add('highlight');
+                            }
+                            
+                            currentLine.appendChild(charSpan);
+                        }
+                    });
+                    
+                    // 添加元数据
+                    const metadata = document.createElement('div');
+                    metadata.className = 'example-metadata';
+                    
+                    metadata.innerHTML = `
+                        <div class="example-author">
+                            <i class="fas fa-user"></i> ${example.author}
+                        </div>
+                        <div>
+                            <i class="fas fa-info-circle"></i> ${example.title}
+                        </div>
+                    `;
+                    
+                    exampleWrapper.appendChild(exampleContent);
+                    exampleWrapper.appendChild(metadata);
+                    exampleContainer.appendChild(exampleWrapper);
+                });
+            }
+
+            // 创建文字展示区域，支持阕间分隔
+            createTextDisplay() {
+                const display = document.getElementById('textDisplay');
+                const sentenceContainer = display.querySelector('.sentence-container');
+                if (sentenceContainer) {
+                    sentenceContainer.innerHTML = '';
+                } else {
+                    const newContainer = document.createElement('div');
+                    newContainer.className = 'sentence-container';
+                    display.appendChild(newContainer);
+                }
+                
+                const container = display.querySelector('.sentence-container');
+                const analysis = this.analyzeText(this.originalFormat);
+                const allPunctuations = [...CHINESE_PUNCTUATIONS, ...ENGLISH_PUNCTUATIONS];
+                
+                // 获取槽位索引映射
+                const slotIndexMap = new Map();
+                this.slotIndices.forEach((originalIndex, slotIndex) => {
+                    slotIndexMap.set(originalIndex, slotIndex);
+                });
+                
+                // 获取每个槽位所属的韵组
+                const slotToGroupMap = new Map();
+                this.rhymeGroups.forEach(group => {
+                    group.positions.forEach(pos => {
+                        if (pos < this.slotIndices.length) {
+                            slotToGroupMap.set(pos, group);
+                        }
+                    });
+                });
+                
+                // 遍历原始文本的每个字符
+                let hasAddedStanzaBreak = false;
+                Array.from(this.originalFormat).forEach((char, originalIndex) => {
+                    // 检查是否需要添加阕间分隔
+                    if (this.currentCipai.stanzas > 1 && 
+                        this.currentCipai.stanzaBreakIndex !== undefined && 
+                        !hasAddedStanzaBreak) {
+                        
+                        // 找到当前字符对应的槽位索引
+                        if (slotIndexMap.has(originalIndex)) {
+                            const slotIndex = slotIndexMap.get(originalIndex);
+                            if (slotIndex === this.currentCipai.stanzaBreakIndex) {
+                                // 在这个字之后添加阕间分隔
+                                const stanzaBreak = document.createElement('div');
+                                stanzaBreak.className = 'stanza-break';
+                                container.appendChild(stanzaBreak);
+                                hasAddedStanzaBreak = true;
+                            }
+                        }
+                    }
+                    
+                    if (slotIndexMap.has(originalIndex)) {
+                        const slotIndex = slotIndexMap.get(originalIndex);
+                        const slotWrapper = document.createElement('div');
+                        slotWrapper.className = 'slot-wrapper';
+                        slotWrapper.dataset.index = slotIndex;
+                        slotWrapper.dataset.originalIndex = originalIndex;
+                        
+                        // 获取平仄提示
+                        const toneHint = this.currentCipai.tones[slotIndex] || '平';
+                        const toneClass = toneHint === '平' ? 'ping' : (toneHint === '仄' ? 'ze' : 'zhong');
+                        
+                        // 创建平仄提示
+                        const hintElement = document.createElement('div');
+                        hintElement.className = `tone-hint ${toneClass}`;
+                        hintElement.textContent = toneHint;
+                        hintElement.title = `平仄要求: ${toneHint}`;
+                        slotWrapper.appendChild(hintElement);
+                        
+                        // 创建韵组标识（如果这个槽位属于某个韵组）
+                        const group = slotToGroupMap.get(slotIndex);
+                        if (group) {
+                            const groupIndicator = document.createElement('div');
+                            groupIndicator.className = 'rhyme-group';
+                            groupIndicator.textContent = group.id;
+                            groupIndicator.title = `韵组 ${group.id}: ${group.description}`;
+                            slotWrapper.appendChild(groupIndicator);
+                            
+                            // 创建韵母提示
+                            const rhymeHint = document.createElement('div');
+                            rhymeHint.className = 'rhyme-hint';
+                            rhymeHint.dataset.slotIndex = slotIndex;
+                            rhymeHint.dataset.groupId = group.id;
+                            slotWrapper.appendChild(rhymeHint);
+                        }
+                        
+                        // 创建拼音显示区域
+                        const pinyinContainer = document.createElement('div');
+                        pinyinContainer.className = 'pinyin-display';
+                        pinyinContainer.dataset.pinyinIndex = slotIndex;
+                        
+                        // 创建拼音文本
+                        const pinyinText = document.createElement('span');
+                        pinyinText.className = 'pinyin-text';
+                        pinyinContainer.appendChild(pinyinText);
+                        
+                        // 多音字切换图标
+                        const polyphoneToggle = document.createElement('div');
+                        polyphoneToggle.className = 'polyphone-toggle';
+                        polyphoneToggle.innerHTML = '<i class="fas fa-exchange-alt"></i>';
+                        polyphoneToggle.title = '点击切换多音字读音';
+                        polyphoneToggle.style.display = 'none';
+                        
+                        polyphoneToggle.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            this.cyclePinyinOption(slotIndex);
+                        });
+                        
+                        pinyinContainer.appendChild(polyphoneToggle);
+                        
+                        // 读音索引指示器
+                        const pinyinIndexIndicator = document.createElement('div');
+                        pinyinIndexIndicator.className = 'pinyin-index';
+                        pinyinIndexIndicator.style.display = 'none';
+                        pinyinContainer.appendChild(pinyinIndexIndicator);
+                        
+                        slotWrapper.appendChild(pinyinContainer);
+                        
+                        // 创建输入槽位
+                        const slot = document.createElement('div');
+                        slot.className = 'slot';
+                        slot.dataset.slotIndex = slotIndex;
+                        slot.dataset.toneHint = toneHint;
+                        
+                        slot.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            this.activeSlotIndex = slotIndex;
+                            this.updateActiveSlot();
+                            this.focusHiddenInput();
+                        });
+                        
+                        slotWrapper.appendChild(slot);
+                        container.appendChild(slotWrapper);
+                    } else if (char === SPACE_CHAR) {
+                        const space = document.createElement('span');
+                        space.className = 'punctuation punctuation-space';
+                        space.innerHTML = '&nbsp;';
+                        container.appendChild(space);
+                    } else if (allPunctuations.includes(char)) {
+                        const punctuation = document.createElement('span');
+                        punctuation.className = 'punctuation';
+                        punctuation.textContent = char;
+                        container.appendChild(punctuation);
+                    }
+                });
+                
+                this.slots = document.querySelectorAll('.slot');
+                this.pinyinContainers = document.querySelectorAll('.pinyin-display');
+            }
+
+            // 获取字符的所有拼音信息
+            getPinyinInfo(char) {
+                if (!char) return null;
+                
+                try {
+                    // 获取所有可能的读音（多音字）
+                    const pinyinArray = pinyin(char, { 
+                        toneType: 'symbol',
+                        type: 'array',
+                        multiple: true
+                    });
+                    
+                    // 转换为数字声调用于平仄判断
+                    const pinyinNumArray = pinyin(char, { 
+                        toneType: 'num',
+                        type: 'array',
+                        multiple: true
+                    });
+                    
+                    // 获取韵母（不带音调）
+                    const finalArray = pinyin(char, {
+                        pattern: 'final',
+                        toneType: 'none',
+                        type: 'array',
+                        multiple: true
+                    });
+                    
+                    // 构建拼音选项数组
+                    const pinyinOptions = pinyinArray.map((pinyinStr, index) => {
+                        const numPinyin = pinyinNumArray[index];
+                        const toneMatch = numPinyin.match(/\d/);
+                        let tone = 0;
+                        
+                        if (toneMatch) {
+                            tone = parseInt(toneMatch[0]);
+                        }
+                        
+                        const isPing = tone === 1 || tone === 2;
+                        const final = finalArray[index] || '';
+                        
+                        return {
+                            pinyin: pinyinStr,
+                            rawPinyin: numPinyin,
+                            tone: tone,
+                            isPing: isPing,
+                            final: final // 韵母
+                        };
+                    });
+                    
+                    return {
+                        char: char,
+                        pinyinOptions: pinyinOptions,
+                        currentPinyinIndex: 0,
+                        isPolyphone: pinyinOptions.length > 1
+                    };
+                } catch (error) {
+                    console.error('获取拼音失败:', error, '字符:', char);
+                    return null;
+                }
+            }
+
+            // 循环切换多音字读音
+            cyclePinyinOption(slotIndex) {
+                if (!this.pinyinInfos[slotIndex] || !this.pinyinInfos[slotIndex].isPolyphone) {
+                    return;
+                }
+                
+                const pinyinInfo = this.pinyinInfos[slotIndex];
+                const totalOptions = pinyinInfo.pinyinOptions.length;
+                
+                // 循环到下一个读音
+                pinyinInfo.currentPinyinIndex = (pinyinInfo.currentPinyinIndex + 1) % totalOptions;
+                
+                // 更新显示
+                this.updatePinyinDisplay(slotIndex);
+                
+                // 重新校验平仄和押韵
+                this.checkAndUpdateSlot(slotIndex);
+                
+                // 更新校验结果和韵组信息
+                this.updateRhymePanel();
+                
+                // 添加切换动画
+                const pinyinText = document.querySelector(`.pinyin-display[data-pinyin-index="${slotIndex}"] .pinyin-text`);
+                pinyinText.style.transform = 'scale(0.8)';
+                setTimeout(() => {
+                    pinyinText.style.transform = 'scale(1)';
+                }, 150);
+            }
+
+            // 获取槽位所属的韵组
+            getSlotRhymeGroup(slotIndex) {
+                for (const group of this.rhymeGroups) {
+                    if (group.positions.includes(slotIndex)) {
+                        return group;
+                    }
+                }
+                return null;
+            }
+
+            // 检查押韵
+            checkRhyme(slotIndex, pinyinInfo) {
+                const group = this.getSlotRhymeGroup(slotIndex);
+                if (!group) return true; // 不属于任何韵组，不需要押韵
+                
+                if (!pinyinInfo) return false;
+                
+                const currentPinyin = pinyinInfo.pinyinOptions[pinyinInfo.currentPinyinIndex];
+                if (!currentPinyin) return false;
+                
+                const final = currentPinyin.final;
+                
+                // 如果韵组还没有确定韵母，设置韵母
+                if (!this.groupVowels[group.id]) {
+                    this.groupVowels[group.id] = final;
+                    return true;
+                }
+                
+                // 检查韵母是否匹配
+                return this.groupVowels[group.id] === final;
+            }
+
+            // 校验平仄
+            checkTone(pinyinInfo, requiredTone) {
+                if (!pinyinInfo) return true;
+                
+                const currentPinyin = pinyinInfo.pinyinOptions[pinyinInfo.currentPinyinIndex];
+                if (!currentPinyin) return true;
+                
+                if (requiredTone === '中') return true; // "中"表示可平可仄
+                
+                if (requiredTone === '平') {
+                    return currentPinyin.isPing === true;
+                } else if (requiredTone === '仄') {
+                    return currentPinyin.isPing === false;
+                }
+                
+                return true;
+            }
+
+            // 更新拼音显示
+            updatePinyinDisplay(slotIndex) {
+                const pinyinContainer = document.querySelector(`.pinyin-display[data-pinyin-index="${slotIndex}"]`);
+                if (!pinyinContainer) return;
+                
+                const pinyinText = pinyinContainer.querySelector('.pinyin-text');
+                const polyphoneToggle = pinyinContainer.querySelector('.polyphone-toggle');
+                const pinyinIndexIndicator = pinyinContainer.querySelector('.pinyin-index');
+                const rhymeHint = document.querySelector(`.rhyme-hint[data-slot-index="${slotIndex}"]`);
+                
+                if (!this.pinyinInfos[slotIndex]) {
+                    pinyinText.textContent = '';
+                    polyphoneToggle.style.display = 'none';
+                    pinyinIndexIndicator.style.display = 'none';
+                    if (rhymeHint) rhymeHint.classList.remove('show');
+                    return;
+                }
+                
+                const pinyinInfo = this.pinyinInfos[slotIndex];
+                const currentPinyin = pinyinInfo.pinyinOptions[pinyinInfo.currentPinyinIndex];
+                
+                // 更新拼音文本
+                pinyinText.textContent = currentPinyin.pinyin;
+                
+                // 显示或隐藏多音字切换图标
+                if (pinyinInfo.isPolyphone && pinyinInfo.pinyinOptions.length > 1) {
+                    polyphoneToggle.style.display = 'flex';
+                    pinyinIndexIndicator.style.display = 'flex';
+                    pinyinIndexIndicator.textContent = `${pinyinInfo.currentPinyinIndex + 1}/${pinyinInfo.pinyinOptions.length}`;
+                } else {
+                    polyphoneToggle.style.display = 'none';
+                    pinyinIndexIndicator.style.display = 'none';
+                }
+                
+                // 更新韵母提示
+                if (rhymeHint) {
+                    const group = this.getSlotRhymeGroup(slotIndex);
+                    if (group && this.groupVowels[group.id]) {
+                        rhymeHint.textContent = this.groupVowels[group.id];
+                        rhymeHint.classList.add('show');
+                    } else {
+                        rhymeHint.classList.remove('show');
+                    }
+                }
+            }
+
+            // 更新韵组信息面板
+            updateRhymePanel() {
+                const panel = document.getElementById('rhymeGroupInfo');
+                if (!panel) return;
+                
+                panel.innerHTML = '';
+                
+                this.rhymeGroups.forEach(group => {
+                    const groupItem = document.createElement('div');
+                    groupItem.className = 'rhyme-group-item';
+                    
+                    const vowel = this.groupVowels[group.id];
+                    const status = vowel ? '已确定' : '待确定';
+                    const statusColor = vowel ? 'var(--success-color)' : 'var(--warning-color)';
+                    
+                    groupItem.innerHTML = `
+                        <div class="rhyme-group-title">韵组 ${group.id}</div>
+                        <div class="rhyme-group-vowel">${vowel || '?'}</div>
+                        <div class="rhyme-group-status" style="color: ${statusColor}">${status}</div>
+                        <div style="font-size: 0.7rem; color: var(--text-color-light); margin-top: 5px;">
+                            要求: ${group.toneType === '中' ? '可平可仄' : group.toneType + '声'}
+                        </div>
+                    `;
+                    
+                    panel.appendChild(groupItem);
+                });
+            }
+
+            bindEvents() {
+                const hiddenInput = document.getElementById('hiddenInput');
+                
+                // 输入法相关事件
+                hiddenInput.addEventListener('compositionstart', () => {
+                    this.isComposing = true;
+                });
+
+                hiddenInput.addEventListener('compositionend', (e) => {
+                    this.isComposing = false;
+                    if (e.data && e.data.trim()) {
+                        this.handleInput(e.data);
+                    }
+                });
+
+                // 普通输入事件
+                hiddenInput.addEventListener('input', (e) => {
+                    if (!this.isComposing) {
+                        this.handleInput(e.data || e.target.value);
+                    }
+                });
+
+                // 键盘事件
+                hiddenInput.addEventListener('keydown', (e) => {
+                    this.handleKeyDown(e);
+                });
+
+                // 粘贴按钮
+                document.getElementById('pasteBtn').addEventListener('click', async () => {
+                    try {
+                        const text = await navigator.clipboard.readText();
+                        this.handlePaste(text);
+                    } catch (err) {
+                        const text = prompt('请粘贴文字：');
+                        if (text) {
+                            this.handlePaste(text);
+                        }
+                    }
+                });
+
+                // 清空按钮
+                document.getElementById('clearBtn').addEventListener('click', () => {
+                    this.chars = Array(this.slotIndices.length).fill('');
+                    this.pinyinInfos = Array(this.slotIndices.length).fill(null);
+                    this.groupVowels = {};
+                    this.activeSlotIndex = 0;
+                    this.updateDisplay();
+                    this.updateRhymePanel();
+                    this.focusHiddenInput();
+                });
+
+                // 聚焦按钮
+                document.getElementById('focusBtn').addEventListener('click', () => {
+                    this.focusHiddenInput();
+                });
+
+                // 全局键盘事件
+                document.addEventListener('keydown', (e) => {
+                    if (!e.target.matches('input, textarea') && 
+                        (e.key.length === 1 || 
+                         e.key === 'Backspace' || 
+                         e.key === 'ArrowLeft' || 
+                         e.key === 'ArrowRight')) {
+                        this.focusHiddenInput();
+                        if (['ArrowLeft', 'ArrowRight', 'Backspace'].includes(e.key)) {
+                            e.preventDefault();
+                        }
+                    }
+                });
+
+                // 全局点击事件
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.slot') && 
+                        !e.target.closest('.polyphone-toggle') &&
+                        !e.target.matches('input, button, .cipai-card')) {
+                        this.focusHiddenInput();
+                    }
+                });
+            }
+
+            focusHiddenInput() {
+                const hiddenInput = document.getElementById('hiddenInput');
+                hiddenInput.focus();
+                hiddenInput.value = '';
+                this.updateActiveSlot();
+            }
+
+            handleInput(inputText) {
+                if (!inputText || inputText.length === 0) return;
+                
+                const characters = Array.from(inputText);
+                
+                for (const char of characters) {
+                    if (this.activeSlotIndex < this.chars.length) {
+                        this.chars[this.activeSlotIndex] = char;
+                        
+                        // 获取拼音信息
+                        const pinyinInfo = this.getPinyinInfo(char);
+                        this.pinyinInfos[this.activeSlotIndex] = pinyinInfo;
+                        
+                        // 更新显示
+                        this.updatePinyinDisplay(this.activeSlotIndex);
+                        
+                        // 校验平仄和押韵
+                        this.checkAndUpdateSlot(this.activeSlotIndex);
+                        
+                        this.activeSlotIndex = Math.min(this.activeSlotIndex + 1, this.chars.length - 1);
+                    }
+                }
+                
+                this.updateDisplay();
+                this.updateActiveSlot();
+                this.updateRhymePanel();
+                
+                document.getElementById('hiddenInput').value = '';
+            }
+
+            handlePaste(text) {
+                const characters = Array.from(text);
+                let startIndex = this.activeSlotIndex;
+                
+                for (let i = 0; i < characters.length; i++) {
+                    const targetIndex = startIndex + i;
+                    if (targetIndex < this.chars.length) {
+                        this.chars[targetIndex] = characters[i];
+                        
+                        // 获取拼音信息
+                        const pinyinInfo = this.getPinyinInfo(characters[i]);
+                        this.pinyinInfos[targetIndex] = pinyinInfo;
+                        
+                        // 更新显示
+                        this.updatePinyinDisplay(targetIndex);
+                        
+                        // 校验平仄和押韵
+                        this.checkAndUpdateSlot(targetIndex);
+                    }
+                }
+                
+                this.activeSlotIndex = Math.min(startIndex + characters.length, this.chars.length - 1);
+                this.updateDisplay();
+                this.updateActiveSlot();
+                this.updateRhymePanel();
+                this.focusHiddenInput();
+            }
+
+            handleKeyDown(e) {
+                switch (e.key) {
+                    case 'ArrowLeft':
+                        e.preventDefault();
+                        this.activeSlotIndex = Math.max(0, this.activeSlotIndex - 1);
+                        this.updateActiveSlot();
+                        break;
+                        
+                    case 'ArrowRight':
+                        e.preventDefault();
+                        this.activeSlotIndex = Math.min(this.chars.length - 1, this.activeSlotIndex + 1);
+                        this.updateActiveSlot();
+                        break;
+                        
+                    case 'Backspace':
+                        e.preventDefault();
+                        this.handleBackspace();
+                        break;
+                        
+                    case 'Delete':
+                        e.preventDefault();
+                        this.chars[this.activeSlotIndex] = '';
+                        this.pinyinInfos[this.activeSlotIndex] = null;
+                        this.updateDisplay();
+                        this.checkAndUpdateSlot(this.activeSlotIndex);
+                        this.updateActiveSlot();
+                        this.updateRhymePanel();
+                        break;
+                        
+                    case 'Home':
+                        e.preventDefault();
+                        this.activeSlotIndex = 0;
+                        this.updateActiveSlot();
+                        break;
+                        
+                    case 'End':
+                        e.preventDefault();
+                        this.activeSlotIndex = this.chars.length - 1;
+                        this.updateActiveSlot();
+                        break;
+                }
+            }
+
+            handleBackspace() {
+                if (this.chars[this.activeSlotIndex] && this.activeSlotIndex > 0) {
+                    this.chars[this.activeSlotIndex] = '';
+                    this.pinyinInfos[this.activeSlotIndex] = null;
+                    this.activeSlotIndex = Math.max(0, this.activeSlotIndex - 1);
+                } else if (this.activeSlotIndex > 0) {
+                    this.chars[this.activeSlotIndex - 1] = '';
+                    this.pinyinInfos[this.activeSlotIndex - 1] = null;
+                    this.activeSlotIndex = Math.max(0, this.activeSlotIndex - 1);
+                } else {
+                    this.chars[0] = '';
+                    this.pinyinInfos[0] = null;
+                }
+                
+                this.updateDisplay();
+                this.checkAndUpdateSlot(this.activeSlotIndex);
+                this.updateActiveSlot();
+                this.updateRhymePanel();
+            }
+
+            // 校验并更新槽位状态
+            checkAndUpdateSlot(slotIndex) {
+                if (!this.slots || slotIndex >= this.slots.length) return;
+                
+                const slot = this.slots[slotIndex];
+                const char = this.chars[slotIndex];
+                const pinyinInfo = this.pinyinInfos[slotIndex];
+                const requiredTone = slot.dataset.toneHint;
+                
+                // 移除之前的状态
+                slot.classList.remove('error', 'has-content');
+                
+                // 更新拼音显示样式
+                const pinyinContainer = document.querySelector(`.pinyin-display[data-pinyin-index="${slotIndex}"]`);
+                if (pinyinContainer) {
+                    pinyinContainer.classList.remove('error', 'correct');
+                }
+                
+                if (char) {
+                    slot.classList.add('has-content');
+                    
+                    // 校验平仄
+                    const isToneValid = this.checkTone(pinyinInfo, requiredTone);
+                    // 校验押韵
+                    const isRhymeValid = this.checkRhyme(slotIndex, pinyinInfo);
+                    
+                    if (!isToneValid || !isRhymeValid) {
+                        slot.classList.add('error');
+                        if (pinyinContainer) {
+                            pinyinContainer.classList.add('error');
+                        }
+                    } else {
+                        if (pinyinContainer) {
+                            pinyinContainer.classList.add('correct');
+                        }
+                    }
+                }
+            }
+
+            updateActiveSlot() {
+                if (!this.slots) return;
+                
+                this.slots.forEach((slot, index) => {
+                    slot.classList.remove('active', 'cursor');
+                    
+                    if (index === this.activeSlotIndex) {
+                        slot.classList.add('active', 'cursor');
+                    }
+                });
+            }
+
+            updateDisplay() {
+                if (!this.slots) return;
+                
+                this.slots.forEach((slot, index) => {
+                    const char = this.chars[index];
+                    
+                    if (char) {
+                        slot.textContent = char;
+                        
+                        // 更新拼音显示
+                        this.updatePinyinDisplay(index);
+                    } else {
+                        slot.textContent = '';
+                        // 清空拼音显示
+                        const pinyinContainer = document.querySelector(`.pinyin-display[data-pinyin-index="${index}"]`);
+                        if (pinyinContainer) {
+                            pinyinContainer.querySelector('.pinyin-text').textContent = '';
+                            pinyinContainer.querySelector('.polyphone-toggle').style.display = 'none';
+                            pinyinContainer.querySelector('.pinyin-index').style.display = 'none';
+                        }
+                        // 清空韵母提示
+                        const rhymeHint = document.querySelector(`.rhyme-hint[data-slot-index="${index}"]`);
+                        if (rhymeHint) {
+                            rhymeHint.classList.remove('show');
+                        }
+                    }
+                });
+            }
+        }
+
+        // 初始化组件
+        document.addEventListener('DOMContentLoaded', async () => {
+            // 设置当前日期
+            setCurrentDate();
+            
+            // 初始化暗色模式
+            initDarkMode();
+            
+            // 创建填词助手实例
+            const ciFillAssistant = new CiFillAssistant();
+            
+            // 初始化助手（会加载外部配置）
+            await ciFillAssistant.init();
+            
+            // 公开实例以便调试
+            window.ciFillAssistant = ciFillAssistant;
+            
+            // URL参数配置支持
+            const urlParams = new URLSearchParams(window.location.search);
+            const cipaiParam = urlParams.get('cipai');
+            
+            // 延迟处理URL参数，确保配置已加载
+            setTimeout(() => {
+                if (cipaiParam && ciFillAssistant.CIPAI_CONFIGS) {
+                    const cipaiConfig = ciFillAssistant.CIPAI_CONFIGS.find(c => c.id === cipaiParam);
+                    if (cipaiConfig) {
+                        ciFillAssistant.selectCipai(cipaiConfig);
+                    }
+                }
+            }, 100);
+            
+            console.log("宋词填词辅助程序初始化完成！");
+            console.log("当前词牌数:", ciFillAssistant.CIPAI_CONFIGS.length);
+        });
+    </script>
+</body>
+</html>
