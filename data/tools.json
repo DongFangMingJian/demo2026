@@ -7,7 +7,7 @@
       "title": "字数统计器",
       "icon": "fas fa-font",
       "description": "精确统计文字中的汉字、英文字母、数字、标点符号数量，支持多种统计维度。",
-      "link": "tools/word-counter.html",
+      "link": "tools/word-counter/word-counter.html",
       "linkText": "使用工具",
       "color": "#4a6fa5",
       "category": "文本处理",
