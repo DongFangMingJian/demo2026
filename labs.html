@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>创意实验室 | 我的创意项目空间</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 全局样式 - 与index.html保持一致 */
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cbc;
+            --accent-color: #ff7e5f;
+            --text-color: #333;
+            --bg-color: #f9f9f9;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --border-radius: 16px;
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary-color: #6b8cbc;
+            --secondary-color: #4a6fa5;
+            --accent-color: #ff9e80;
+            --text-color: #f0f0f0;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: var(--transition);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* 头部样式 - 与index.html保持一致 */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(74, 111, 165, 0.3);
+        }
+
+        .logo h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+
+        .logo h2 i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+
+        /* 主题切换样式 - 与index.html保持一致 */
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: var(--transition);
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: var(--transition);
+            width: 26px;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .theme-label {
+            margin-left: 10px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* 页面头部 */
+        .page-header {
+            text-align: center;
+            padding: 40px 0 30px;
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            max-width: 800px;
+            margin: 0 auto 25px;
+        }
+
+        /* 实验室统计 */
+        .lab-stats {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .stat-item {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            min-width: 150px;
+            text-align: center;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px var(--shadow-color);
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .stat-number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        /* 标签筛选器 */
+        .tag-filter {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .tag-filter h3 {
+            font-size: 1.4rem;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .tag-buttons {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .tag-btn {
+            padding: 8px 16px;
+            background-color: rgba(74, 111, 165, 0.1);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .tag-btn:hover, .tag-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        /* 项目网格 */
+        .projects-container {
+            margin-bottom: 60px;
+        }
+
+        .projects-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(74, 111, 165, 0.2);
+        }
+
+        .projects-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+        }
+
+        .projects-count {
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 35px;
+        }
+
+        /* 项目卡片 */
+        .project-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 10px 20px var(--shadow-color);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px var(--shadow-color);
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .project-header {
+            padding: 25px 25px 15px;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .project-icon {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            height: 70px;
+            width: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(74, 111, 165, 0.1);
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .project-title-section {
+            flex-grow: 1;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+            color: var(--primary-color);
+            line-height: 1.3;
+        }
+
+        .project-subtitle {
+            color: var(--secondary-color);
+            font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .project-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .project-content {
+            padding: 0 25px 20px;
+            flex-grow: 1;
+        }
+
+        .project-description {
+            color: var(--secondary-color);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .project-features {
+            margin-bottom: 20px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-color);
+        }
+
+        .feature-item i {
+            color: var(--primary-color);
+            margin-right: 8px;
+            font-size: 0.8rem;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 25px;
+        }
+
+        .project-tag {
+            background-color: rgba(74, 111, 165, 0.1);
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .project-tag:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .project-footer {
+            padding: 20px 25px 25px;
+            border-top: 1px solid rgba(74, 111, 165, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .project-link {
+            padding: 8px 16px;
+            background-color: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .project-link:hover {
+            background-color: var(--accent-color);
+            transform: scale(1.05);
+        }
+
+        .project-link.secondary {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .project-link.secondary:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .project-meta {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .project-meta i {
+            color: var(--accent-color);
+        }
+
+        /* 页脚样式 - 与index.html保持一致 */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+            border-top: 1px solid rgba(74, 111, 165, 0.2);
+        }
+
+        #card-count {
+            margin-top: 10px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 1100px) {
+            .projects-grid {
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                gap: 25px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2.8rem;
+            }
+            
+            .page-header p {
+                font-size: 1rem;
+            }
+            
+            .lab-stats {
+                gap: 15px;
+            }
+            
+            .stat-item {
+                min-width: 120px;
+                padding: 15px;
+            }
+            
+            .stat-number {
+                font-size: 1.8rem;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-header {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .project-footer {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+            
+            .project-links {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .tag-buttons {
+                justify-content: flex-start;
+            }
+            
+            .project-links {
+                flex-direction: column;
+            }
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .project-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 - 与index.html保持一致 -->
+        <header>
+            <div class="logo">
+                <h2><i class="fas fa-flask"></i> 创意实验室</h2>
+            </div>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider"></div>
+                </label>
+                <div class="theme-label">夜间模式</div>
+            </div>
+        </header>
+
+        <!-- 页面内容 -->
+        <main>
+            <!-- 页面头部 -->
+            <section class="page-header">
+                <h1>我的创意实验室</h1>
+                <p>这里展示我的创意项目、实验性作品和技术探索。每一个项目都是我学习和实践的结晶。</p>
+            </section>
+
+            <!-- 实验室统计 -->
+            <div class="lab-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="total-projects">0</div>
+                    <div class="stat-label">项目总数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="total-technologies">0</div>
+                    <div class="stat-label">技术栈</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="in-progress">0</div>
+                    <div class="stat-label">进行中</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="completed">0</div>
+                    <div class="stat-label">已完成</div>
+                </div>
+            </div>
+
+            <!-- 标签筛选器 -->
+            <div class="tag-filter">
+                <h3>按技术/分类筛选</h3>
+                <div class="tag-buttons" id="tag-buttons">
+                    <!-- 标签将通过JavaScript动态生成 -->
+                </div>
+            </div>
+
+            <!-- 项目网格 -->
+            <section class="projects-container">
+                <div class="projects-header">
+                    <h2 id="current-category">所有项目</h2>
+                    <div class="projects-count" id="projects-count">共 0 个项目</div>
+                </div>
+                <div class="projects-grid" id="projects-grid">
+                    <!-- 项目将通过JavaScript动态生成 -->
+                </div>
+            </section>
+        </main>
+
+        <!-- 页脚 - 与index.html保持一致 -->
+        <footer>
+            <p>创意实验室 | 设计响应式，支持夜间模式与移动端适配</p>
+            <p>最后更新: <span id="current-date"></span></p>
+            <p id="card-count">当前项目数量: <span id="count">0</span></p>
+        </footer>
+    </div>
+
+    <!-- 加载配置和共享组件 -->
+    <script src="config.js"></script>
+    <script src="shared/darkmode.js"></script>
+    
+    <script>
+        // ======================
+        // 创意实验室页面功能脚本
+        // ======================
+        
+        // 页面配置
+        const pageConfig = {
+            currentTag: 'all'
+        };
+
+        // 加载项目数据
+        async function loadProjectsData() {
+            try {
+                const response = await fetch('./data/labs.json');
+                const data = await response.json();
+                return data.projects;
+            } catch (error) {
+                console.error('加载项目数据失败:', error);
+                // 返回示例数据
+                return [
+                    {
+                        id: 1,
+                        title: "智能天气应用",
+                        subtitle: "实时天气与预报系统",
+                        icon: "fas fa-cloud-sun",
+                        status: "completed",
+                        description: "一个使用Vue.js和OpenWeatherMap API构建的响应式天气应用，提供实时天气数据、7天预报和天气预警功能。",
+                        features: ["实时天气数据", "7天天气预报", "空气质量指数", "响应式设计"],
+                        tags: ["Vue.js", "API", "CSS3", "JavaScript"],
+                        technologies: ["Vue 3", "Axios", "Chart.js"],
+                        demoUrl: "https://demo.example.com",
+                        codeUrl: "https://github.com/username/weather-app",
+                        date: "2023-10-15",
+                        difficulty: "中级"
+                    },
+                    {
+                        id: 2,
+                        title: "数据可视化仪表板",
+                        subtitle: "企业数据分析平台",
+                        icon: "fas fa-chart-line",
+                        status: "in-progress",
+                        description: "一个交互式数据可视化仪表板，用于展示企业关键指标和趋势分析，支持多种图表类型和数据筛选。",
+                        features: ["多种图表类型", "实时数据更新", "数据导出", "用户权限管理"],
+                        tags: ["React", "D3.js", "Node.js", "MongoDB"],
+                        technologies: ["React 18", "D3.js", "Express.js", "MongoDB"],
+                        demoUrl: "",
+                        codeUrl: "https://github.com/username/dashboard",
+                        date: "2023-11-20",
+                        difficulty: "高级"
+                    }
+                ];
+            }
+        }
+
+        // 获取所有标签
+        function getAllTags(projects) {
+            const tags = new Set();
+            projects.forEach(project => {
+                project.tags.forEach(tag => tags.add(tag));
+            });
+            return Array.from(tags);
+        }
+
+        // 获取所有技术栈
+        function getAllTechnologies(projects) {
+            const technologies = new Set();
+            projects.forEach(project => {
+                if (project.technologies) {
+                    project.technologies.forEach(tech => technologies.add(tech));
+                }
+            });
+            return Array.from(technologies);
+        }
+
+        // 根据标签筛选项目
+        function filterProjectsByTag(projects) {
+            if (pageConfig.currentTag === 'all') {
+                return projects;
+            }
+            
+            return projects.filter(project => 
+                project.tags.includes(pageConfig.currentTag)
+            );
+        }
+
+        // 统计项目状态
+        function countProjectsByStatus(projects) {
+            let inProgress = 0;
+            let completed = 0;
+            
+            projects.forEach(project => {
+                if (project.status === 'in-progress') {
+                    inProgress++;
+                } else if (project.status === 'completed') {
+                    completed++;
+                }
+            });
+            
+            return { inProgress, completed };
+        }
+
+        // 更新实验室统计
+        function updateLabStats(projects) {
+            document.getElementById('total-projects').textContent = projects.length;
+            
+            const technologies = getAllTechnologies(projects);
+            document.getElementById('total-technologies').textContent = technologies.length;
+            
+            const { inProgress, completed } = countProjectsByStatus(projects);
+            document.getElementById('in-progress').textContent = inProgress;
+            document.getElementById('completed').textContent = completed;
+        }
+
+        // 生成标签筛选器
+        function renderTagFilter(projects) {
+            const tagButtonsContainer = document.getElementById('tag-buttons');
+            const tags = getAllTags(projects);
+            
+            let tagButtonsHTML = `
+                <button class="tag-btn ${pageConfig.currentTag === 'all' ? 'active' : ''}" data-tag="all">
+                    全部项目
+                </button>
+            `;
+            
+            tags.forEach(tag => {
+                tagButtonsHTML += `
+                    <button class="tag-btn ${pageConfig.currentTag === tag ? 'active' : ''}" data-tag="${tag}">
+                        ${tag}
+                    </button>
+                `;
+            });
+            
+            tagButtonsContainer.innerHTML = tagButtonsHTML;
+            
+            // 为标签按钮添加事件监听
+            document.querySelectorAll('.tag-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tag = this.getAttribute('data-tag');
+                    pageConfig.currentTag = tag;
+                    
+                    renderTagFilter(projects);
+                    renderProjects(projects);
+                    updateCurrentCategoryText();
+                });
+            });
+        }
+
+        // 更新当前分类文本
+        function updateCurrentCategoryText() {
+            const currentCategoryElement = document.getElementById('current-category');
+            let categoryText = '所有项目';
+            
+            if (pageConfig.currentTag !== 'all') {
+                categoryText = `${pageConfig.currentTag} 项目`;
+            }
+            
+            currentCategoryElement.textContent = categoryText;
+        }
+
+        // 生成状态徽章
+        function getStatusBadge(status) {
+            if (status === 'in-progress') {
+                return '<span class="project-badge">进行中</span>';
+            } else if (status === 'completed') {
+                return '<span class="project-badge" style="background-color: #4CAF50;">已完成</span>';
+            } else if (status === 'planned') {
+                return '<span class="project-badge" style="background-color: #FF9800;">计划中</span>';
+            }
+            return '';
+        }
+
+        // 生成项目卡片
+        function createProjectCard(project) {
+            const featuresHTML = project.features.map(feature => 
+                `<div class="feature-item"><i class="fas fa-check-circle"></i> ${feature}</div>`
+            ).join('');
+            
+            const tagsHTML = project.tags.map(tag => 
+                `<span class="project-tag" data-tag="${tag}">${tag}</span>`
+            ).join('');
+            
+            const technologiesHTML = project.technologies ? 
+                `<div class="feature-item"><i class="fas fa-code"></i> 技术栈: ${project.technologies.join(', ')}</div>` : '';
+            
+            const demoButton = project.demoUrl ? 
+                `<a href="${project.demoUrl}" class="project-link" target="_blank" rel="noopener noreferrer">
+                    <i class="fas fa-external-link-alt"></i> 在线演示
+                </a>` : '';
+            
+            const codeButton = project.codeUrl ? 
+                `<a href="${project.codeUrl}" class="project-link secondary" target="_blank" rel="noopener noreferrer">
+                    <i class="fab fa-github"></i> 查看源码
+                </a>` : '';
+            
+            const statusBadge = getStatusBadge(project.status);
+            
+            return `
+                <div class="project-card" data-id="${project.id}">
+                    ${statusBadge}
+                    <div class="project-header">
+                        <div class="project-icon">
+                            <i class="${project.icon}"></i>
+                        </div>
+                        <div class="project-title-section">
+                            <h3 class="project-title">${project.title}</h3>
+                            <div class="project-subtitle">${project.subtitle}</div>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <p class="project-description">${project.description}</p>
+                        
+                        <div class="project-features">
+                            ${featuresHTML}
+                            ${technologiesHTML}
+                        </div>
+                        
+                        <div class="project-tags">
+                            ${tagsHTML}
+                        </div>
+                    </div>
+                    <div class="project-footer">
+                        <div class="project-links">
+                            ${demoButton}
+                            ${codeButton}
+                        </div>
+                        <div class="project-meta">
+                            <i class="fas fa-calendar-alt"></i>
+                            <span>${project.date}</span>
+                            <i class="fas fa-signal"></i>
+                            <span>${project.difficulty}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 渲染项目
+        function renderProjects(projects) {
+            const projectsGridContainer = document.getElementById('projects-grid');
+            const filteredProjects = filterProjectsByTag(projects);
+            
+            // 更新项目数量
+            document.getElementById('projects-count').textContent = `共 ${filteredProjects.length} 个项目`;
+            document.getElementById('count').textContent = filteredProjects.length;
+            
+            if (filteredProjects.length === 0) {
+                projectsGridContainer.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                        <h3 style="color: var(--secondary-color); margin-bottom: 20px;">暂无相关项目</h3>
+                        <p style="color: var(--secondary-color);">尝试选择其他标签查看项目</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            let projectsHTML = '';
+            filteredProjects.forEach((project, index) => {
+                projectsHTML += createProjectCard(project);
+                // 添加动画延迟
+                setTimeout(() => {
+                    const card = document.querySelector(`[data-id="${project.id}"]`);
+                    if (card) card.style.animationDelay = `${index * 0.1}s`;
+                }, 100);
+            });
+            
+            projectsGridContainer.innerHTML = projectsHTML;
+            
+            // 为项目标签添加点击事件
+            document.querySelectorAll('.project-tag').forEach(tag => {
+                tag.addEventListener('click', function(e) {
+                    e.stopPropagation(); // 防止事件冒泡
+                    const tagName = this.textContent;
+                    pageConfig.currentTag = tagName;
+                    
+                    renderTagFilter(projects);
+                    renderProjects(projects);
+                    updateCurrentCategoryText();
+                });
+            });
+        }
+
+        // 设置当前日期
+        function setCurrentDate() {
+            const currentDateElement = document.getElementById('current-date');
+            if (currentDateElement) {
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                currentDateElement.textContent = now.toLocaleDateString('zh-CN', options);
+            }
+        }
+
+        // 初始化页面
+        async function initPage() {
+            // 设置当前日期
+            setCurrentDate();
+            
+            // 初始化暗色模式
+            new DarkModeComponent();
+            
+            // 为夜间模式切换按钮添加事件监听
+            document.getElementById('checkbox').addEventListener('change', function() {
+                new DarkModeComponent().toggleDarkMode();
+            });
+            
+            // 加载项目数据
+            const projects = await loadProjectsData();
+            
+            // 更新实验室统计
+            updateLabStats(projects);
+            
+            // 生成标签筛选器
+            renderTagFilter(projects);
+            
+            // 渲染项目
+            renderProjects(projects);
+            
+            // 更新当前分类文本
+            updateCurrentCategoryText();
+            
+            console.log("创意实验室页面初始化完成！");
+        }
+
+        // 页面加载完成后初始化
+        document.addEventListener('DOMContentLoaded', initPage);
+    </script>
+</body>
+</html>

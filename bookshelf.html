@@ -14,7 +14,7 @@
             --bg-color: #f9f9f9;
             --card-bg: #ffffff;
             --shadow-color: rgba(0, 0, 0, 0.1);
-            --border-radius: 12px;
+            --border-radius: 16px;
             --transition: all 0.3s ease;
         }
 
@@ -41,81 +41,38 @@
             line-height: 1.6;
             transition: var(--transition);
             min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 20px;
         }
 
-        /* 头部 */
+        /* 头部样式 - 与index.html保持一致 */
         header {
-            background-color: var(--card-bg);
-            box-shadow: 0 4px 12px var(--shadow-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 0;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(74, 111, 165, 0.3);
         }
 
-        .logo a {
-            text-decoration: none;
+        .logo h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
             display: flex;
             align-items: center;
-            color: var(--primary-color);
         }
 
-        .logo h1 {
-            font-size: 1.8rem;
-            margin-left: 10px;
-        }
-
-        .logo-icon {
+        .logo h2 i {
+            margin-right: 10px;
             font-size: 2rem;
         }
 
-        /* 导航和主题切换 */
-        .nav-controls {
-            display: flex;
-            align-items: center;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            margin-right: 30px;
-        }
-
-        .nav-links li {
-            margin-left: 25px;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 600;
-            transition: var(--transition);
-            padding: 5px 10px;
-            border-radius: 4px;
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-color);
-            background-color: rgba(74, 111, 165, 0.1);
-        }
-
-        .nav-links a.active {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-        }
-
+        /* 主题切换样式 - 与index.html保持一致 */
         .theme-switch-wrapper {
             display: flex;
             align-items: center;
@@ -173,13 +130,12 @@
         /* 页面头部 */
         .page-header {
             text-align: center;
-            padding: 60px 0 40px;
+            padding: 40px 0 30px;
             margin-bottom: 30px;
-            border-bottom: 1px solid rgba(74, 111, 165, 0.2);
         }
 
         .page-header h2 {
-            font-size: 2.8rem;
+            font-size: 3rem;
             margin-bottom: 15px;
             color: var(--primary-color);
         }
@@ -206,7 +162,25 @@
             padding: 20px;
             min-width: 150px;
             text-align: center;
-            box-shadow: 0 5px 15px var(--shadow-color);
+            box-shadow: 0 10px 20px var(--shadow-color);
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px var(--shadow-color);
+        }
+
+        .stat-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .stat-number {
@@ -236,9 +210,21 @@
             border-radius: var(--border-radius);
             padding: 25px;
             height: fit-content;
-            box-shadow: 0 8px 20px var(--shadow-color);
+            box-shadow: 0 10px 20px var(--shadow-color);
             position: sticky;
-            top: 100px;
+            top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .category-nav::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .category-nav h3 {
@@ -350,7 +336,19 @@
             background-color: var(--card-bg);
             border-radius: var(--border-radius);
             padding: 30px;
-            box-shadow: 0 8px 20px var(--shadow-color);
+            box-shadow: 0 10px 20px var(--shadow-color);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .books-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .books-header {
@@ -386,11 +384,23 @@
             transition: var(--transition);
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .book-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
         }
 
         .book-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 12px 25px var(--shadow-color);
+            box-shadow: 0 15px 30px var(--shadow-color);
         }
 
         /* 书籍封面区域 */
@@ -557,49 +567,26 @@
 
         .copy-url-btn:hover {
             background-color: var(--accent-color);
+            transform: scale(1.05);
         }
 
         .copy-url-btn.copied {
             background-color: #4CAF50;
         }
 
-        /* 页脚 */
+        /* 页脚样式 - 与index.html保持一致 */
         footer {
-            background-color: var(--card-bg);
-            padding: 40px 0;
             text-align: center;
+            padding: 20px;
+            color: var(--secondary-color);
+            font-size: 0.9rem;
             border-top: 1px solid rgba(74, 111, 165, 0.2);
         }
 
-        .footer-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            list-style: none;
-            margin-bottom: 25px;
-        }
-
-        .footer-links li {
-            margin: 0 15px;
-        }
-
-        .footer-links a {
-            color: var(--secondary-color);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
+        #card-count {
+            margin-top: 10px;
+            font-weight: 600;
             color: var(--primary-color);
-        }
-
-        .copyright {
-            color: var(--secondary-color);
-            font-size: 0.9rem;
         }
 
         /* 响应式设计 */
@@ -619,21 +606,6 @@
         }
 
         @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .nav-controls {
-                width: 100%;
-                justify-content: space-between;
-                margin-top: 20px;
-            }
-            
-            .nav-links {
-                margin-right: 0;
-            }
-            
             .page-header h2 {
                 font-size: 2.2rem;
             }
@@ -660,25 +632,7 @@
             }
         }
 
-        @media (max-width: 576px) {
-            .nav-controls {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .nav-links {
-                flex-wrap: wrap;
-                margin-bottom: 20px;
-            }
-            
-            .nav-links li {
-                margin: 5px 15px 5px 0;
-            }
-            
-            .theme-switch-wrapper {
-                align-self: flex-end;
-            }
-            
+        @media (max-width: 480px) {
             .books-header {
                 flex-direction: column;
                 align-items: flex-start;
@@ -702,58 +656,79 @@
     </style>
 </head>
 <body>
-    <!-- 页面内容 -->
-    <main class="container">
-        <!-- 页面头部 -->
-        <section class="page-header">
-            <h2>个人数字书架</h2>
-            <p>收藏和整理我的电子书籍资源，包含技术文档、文学作品、学习资料等。所有书籍提供直接下载链接。</p>
-        </section>
+    <div class="container">
+        <!-- 头部 - 与index.html保持一致 -->
+        <header>
+            <div class="logo">
+                <h2><i class="fas fa-book"></i> 个人数字书架</h2>
+            </div>
+            <div class="theme-switch-wrapper">
+                <label class="theme-switch" for="checkbox">
+                    <input type="checkbox" id="checkbox" />
+                    <div class="slider"></div>
+                </label>
+                <div class="theme-label">夜间模式</div>
+            </div>
+        </header>
 
-        <!-- 书架统计 -->
-        <div class="books-stats">
-            <div class="stat-item">
-                <div class="stat-number" id="total-books">0</div>
-                <div class="stat-label">总藏书量</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="total-categories">0</div>
-                <div class="stat-label">分类数量</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="total-storage">0 GB</div>
-                <div class="stat-label">存储空间</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number" id="total-tags">0</div>
-                <div class="stat-label">标签数量</div>
-            </div>
-        </div>
-
-        <!-- 书架主体布局 -->
-        <div class="bookshelf-layout">
-            <!-- 分类导航 -->
-            <nav class="category-nav" id="category-nav">
-                <!-- 分类导航将通过JavaScript动态生成 -->
-            </nav>
-
-            <!-- 书籍网格 -->
-            <section class="books-container">
-                <div class="books-header">
-                    <h3 id="current-category">全部书籍</h3>
-                    <div class="books-count" id="books-count">共 0 本书</div>
-                </div>
-                <div class="books-grid" id="books-grid">
-                    <!-- 书籍将通过JavaScript动态生成 -->
-                </div>
+        <!-- 页面内容 -->
+        <main>
+            <!-- 页面头部 -->
+            <section class="page-header">
+                <h2>我的数字图书馆</h2>
+                <p>收藏和整理我的电子书籍资源，包含技术文档、文学作品、学习资料等。所有书籍提供直接下载链接。</p>
             </section>
-        </div>
-    </main>
+
+            <!-- 书架统计 -->
+            <div class="books-stats">
+                <div class="stat-item">
+                    <div class="stat-number" id="total-books">0</div>
+                    <div class="stat-label">总藏书量</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="total-categories">0</div>
+                    <div class="stat-label">分类数量</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="total-storage">0 GB</div>
+                    <div class="stat-label">存储空间</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="total-tags">0</div>
+                    <div class="stat-label">标签数量</div>
+                </div>
+            </div>
+
+            <!-- 书架主体布局 -->
+            <div class="bookshelf-layout">
+                <!-- 分类导航 -->
+                <nav class="category-nav" id="category-nav">
+                    <!-- 分类导航将通过JavaScript动态生成 -->
+                </nav>
+
+                <!-- 书籍网格 -->
+                <section class="books-container">
+                    <div class="books-header">
+                        <h3 id="current-category">全部书籍</h3>
+                        <div class="books-count" id="books-count">共 0 本书</div>
+                    </div>
+                    <div class="books-grid" id="books-grid">
+                        <!-- 书籍将通过JavaScript动态生成 -->
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- 页脚 - 与index.html保持一致 -->
+        <footer>
+            <p>个人门户 | 设计响应式，支持夜间模式与移动端适配</p>
+            <p>最后更新: <span id="current-date"></span></p>
+            <p id="card-count">当前藏书数量: <span id="count">0</span></p>
+        </footer>
+    </div>
 
     <!-- 加载配置和共享组件 -->
     <script src="config.js"></script>
-    <script src="shared/header.js"></script>
-    <script src="shared/footer.js"></script>
     <script src="shared/darkmode.js"></script>
     
     <script>
@@ -1067,6 +1042,7 @@
             
             // 更新书籍数量
             document.getElementById('books-count').textContent = `共 ${filteredBooks.length} 本书`;
+            document.getElementById('count').textContent = filteredBooks.length;
             
             if (filteredBooks.length === 0) {
                 booksGridContainer.innerHTML = `
@@ -1184,12 +1160,28 @@
             }
         }
 
+        // 设置当前日期
+        function setCurrentDate() {
+            const currentDateElement = document.getElementById('current-date');
+            if (currentDateElement) {
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                currentDateElement.textContent = now.toLocaleDateString('zh-CN', options);
+            }
+        }
+
         // 初始化页面
         async function initPage() {
-            // 加载共享组件
-            new HeaderComponent('bookshelf');
-            new FooterComponent({ books: 0 });
+            // 设置当前日期
+            setCurrentDate();
+            
+            // 初始化暗色模式
             new DarkModeComponent();
+            
+            // 为夜间模式切换按钮添加事件监听
+            document.getElementById('checkbox').addEventListener('change', function() {
+                new DarkModeComponent().toggleDarkMode();
+            });
             
             // 加载书籍数据
             const books = await loadBooksData();

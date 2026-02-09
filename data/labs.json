@@ -1,0 +1,126 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "title": "宋词填词辅助程序",
+      "subtitle": "支持平仄校验与押韵辅助，为创作古典诗词服务",
+      "icon": "fas fa-cloud-sun",
+      "status": "completed",
+      "description": "一个使用Vue.js和OpenWeatherMap API构建的响应式天气应用，提供实时天气数据、7天预报和天气预警功能。",
+      "features": [
+        "基于平仄校验的古典诗词创作工具，支持完整押韵系统"
+      ],
+      "tags": ["前端"],
+      "technologies": ["HTML5","JavaScript","CSS3"],
+      "demoUrl": "../labs/cipai-editor/cipai-editor/",
+      "codeUrl": "../labs/cipai-editor/cipai-editor/",
+      "date": "2026-02-09",
+      "difficulty": "中级"
+    },
+    {
+      "id": 2,
+      "title": "数据可视化仪表板",
+      "subtitle": "企业数据分析平台",
+      "icon": "fas fa-chart-line",
+      "status": "in-progress",
+      "description": "一个交互式数据可视化仪表板，用于展示企业关键指标和趋势分析，支持多种图表类型和数据筛选。",
+      "features": [
+        "多种图表类型",
+        "实时数据更新",
+        "数据导出功能",
+        "用户权限管理",
+        "自定义报表"
+      ],
+      "tags": ["React", "D3.js", "Node.js", "MongoDB", "全栈"],
+      "technologies": ["React 18", "D3.js", "Express.js", "MongoDB", "Socket.io"],
+      "demoUrl": "",
+      "codeUrl": "https://github.com/username/data-dashboard",
+      "date": "2023-11-20",
+      "difficulty": "高级"
+    },
+    {
+      "id": 3,
+      "title": "个人博客系统",
+      "subtitle": "Markdown驱动的静态博客",
+      "icon": "fas fa-blog",
+      "status": "completed",
+      "description": "基于Jekyll构建的静态博客系统，支持Markdown写作、代码高亮、标签分类和搜索功能。",
+      "features": [
+        "Markdown支持",
+        "代码语法高亮",
+        "标签分类系统",
+        "响应式设计",
+        "SEO优化"
+      ],
+      "tags": ["Jekyll", "Markdown", "静态网站", "博客"],
+      "technologies": ["Jekyll", "Ruby", "Liquid", "GitHub Pages"],
+      "demoUrl": "https://blog.example.com",
+      "codeUrl": "https://github.com/username/personal-blog",
+      "date": "2023-09-05",
+      "difficulty": "初级"
+    },
+    {
+      "id": 4,
+      "title": "AI图片生成器",
+      "subtitle": "基于深度学习的创意工具",
+      "icon": "fas fa-robot",
+      "status": "in-progress",
+      "description": "利用Stable Diffusion模型开发的AI图片生成工具，支持文本到图片转换和风格迁移功能。",
+      "features": [
+        "文本到图片生成",
+        "多种艺术风格",
+        "图片编辑功能",
+        "批量处理",
+        "API接口"
+      ],
+      "tags": ["Python", "AI", "深度学习", "图像处理"],
+      "technologies": ["PyTorch", "Stable Diffusion", "FastAPI", "Redis"],
+      "demoUrl": "https://ai.example.com/image-generator",
+      "codeUrl": "https://github.com/username/ai-image-generator",
+      "date": "2023-12-10",
+      "difficulty": "高级"
+    },
+    {
+      "id": 5,
+      "title": "任务管理工具",
+      "subtitle": "团队协作与项目管理",
+      "icon": "fas fa-tasks",
+      "status": "completed",
+      "description": "一个完整的团队任务管理应用，支持看板视图、时间跟踪、文件共享和团队协作功能。",
+      "features": [
+        "看板式任务管理",
+        "时间跟踪与报告",
+        "文件上传共享",
+        "团队协作",
+        "移动端支持"
+      ],
+      "tags": ["React", "Node.js", "PostgreSQL", "WebSocket"],
+      "technologies": ["React", "Express.js", "PostgreSQL", "Socket.io", "JWT"],
+      "demoUrl": "https://demo.example.com/task-manager",
+      "codeUrl": "https://github.com/username/task-manager",
+      "date": "2023-08-22",
+      "difficulty": "中级"
+    },
+    {
+      "id": 6,
+      "title": "3D产品展示器",
+      "subtitle": "WebGL三维可视化",
+      "icon": "fas fa-cube",
+      "status": "planned",
+      "description": "基于Three.js的3D产品展示工具，允许用户在浏览器中交互式查看产品的三维模型。",
+      "features": [
+        "3D模型加载",
+        "交互式旋转缩放",
+        "材质与灯光控制",
+        "AR预览支持",
+        "产品配置器"
+      ],
+      "tags": ["Three.js", "WebGL", "3D", "前端"],
+      "technologies": ["Three.js", "GLTF", "WebGL", "React Three Fiber"],
+      "demoUrl": "",
+      "codeUrl": "",
+      "date": "2024-01-15",
+      "difficulty": "高级"
+    }
+  ]
+}

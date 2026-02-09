@@ -67,9 +67,9 @@
     {
       "id": 9,
       "title": "创意实验室",
-      "icon": "fas fa-lightbulb",
+      "icon": "fas fa-flask",
       "description": "分享一些有趣的创意和实验项目",
-      "link": "./lab.html",
+      "link": "./labs.html",
       "linkText": "进入实验室"
     }
   ]
