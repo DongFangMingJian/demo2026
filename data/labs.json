@@ -12,8 +12,8 @@
       ],
       "tags": ["前端"],
       "technologies": ["HTML5","JavaScript","CSS3"],
-      "demoUrl": "labs/cipai-editor/cipai-editor/",
-      "codeUrl": "labs/cipai-editor/cipai-editor/",
+      "demoUrl": "labs/cipai-editor/cipai-editor.html",
+      "codeUrl": "labs/cipai-editor/cipai-editor.html",
       "date": "2026-02-09",
       "difficulty": "中级"
     },
