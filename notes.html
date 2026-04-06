@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学习笔记 | 知识库</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #6b8cbc;
+            --accent-color: #ff7e5f;
+            --text-color: #333;
+            --bg-color: #f9f9f9;
+            --card-bg: #ffffff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --border-radius: 12px;
+            --transition: all 0.3s ease;
+        }
+
+        .dark-mode {
+            --primary-color: #6b8cbc;
+            --secondary-color: #4a6fa5;
+            --accent-color: #ff9e80;
+            --text-color: #f0f0f0;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* 头部 */
+        header {
+            background-color: var(--card-bg);
+            box-shadow: 0 4px 12px var(--shadow-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo a {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            color: var(--primary-color);
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            margin-left: 10px;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .nav-controls {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            margin-right: 30px;
+        }
+
+        .nav-links li {
+            margin-left: 25px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 600;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+            background-color: rgba(74, 111, 165, 0.1);
+        }
+
+        .nav-links a.active {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--primary-color);
+        }
+
+        .theme-switch-wrapper {
+            display: flex;
+            align-items: center;
+        }
+
+        .theme-switch {
+            display: inline-block;
+            height: 34px;
+            position: relative;
+            width: 60px;
+        }
+
+        .theme-switch input {
+            display: none;
+        }
+
+        .slider {
+            background-color: #ccc;
+            bottom: 0;
+            cursor: pointer;
+            left: 0;
+            position: absolute;
+            right: 0;
+            top: 0;
+            transition: var(--transition);
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            background-color: #fff;
+            bottom: 4px;
+            content: "";
+            height: 26px;
+            left: 4px;
+            position: absolute;
+            transition: var(--transition);
+            width: 26px;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .theme-label {
+            margin-left: 10px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* 页面头部 */
+        .page-header {
+            text-align: center;
+            padding: 60px 0 40px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(74, 111, 165, 0.2);
+        }
+
+        .page-header h2 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            color: var(--secondary-color);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 主布局 */
+        .notes-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        /* 科目侧边栏 */
+        .subjects-sidebar {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: 0 8px 20px var(--shadow-color);
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .subjects-sidebar h3 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(74, 111, 165, 0.2);
+        }
+
+        .subject-list {
+            list-style: none;
+        }
+
+        .subject-item {
+            margin-bottom: 10px;
+        }
+
+        .subject-btn {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: rgba(74, 111, 165, 0.1);
+            color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            text-align: left;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .subject-btn:hover, .subject-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .subject-count {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 0.8rem;
+        }
+
+        .subject-btn:hover .subject-count,
+        .subject-btn.active .subject-count {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* 笔记内容区域 */
+        .notes-content {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            box-shadow: 0 8px 20px var(--shadow-color);
+        }
+
+        .current-subject-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(74, 111, 165, 0.2);
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .subject-info h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        .subject-info p {
+            color: var(--secondary-color);
+        }
+
+        .download-css-btn {
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .download-css-btn:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        /* 笔记网格 */
+        .notes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .note-card {
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 5px 15px var(--shadow-color);
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .note-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px var(--shadow-color);
+        }
+
+        .note-header {
+            padding: 20px 20px 10px;
+            border-bottom: 1px solid rgba(74, 111, 165, 0.1);
+        }
+
+        .note-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .note-date {
+            font-size: 0.85rem;
+            color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .note-description {
+            padding: 15px 20px;
+            color: var(--secondary-color);
+            flex-grow: 1;
+            font-size: 0.95rem;
+        }
+
+        .note-tags {
+            padding: 0 20px 15px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .note-tag {
+            background-color: rgba(74, 111, 165, 0.1);
+            color: var(--primary-color);
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .note-actions {
+            padding: 15px 20px 20px;
+            border-top: 1px solid rgba(74, 111, 165, 0.1);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .view-btn, .download-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.85rem;
+        }
+
+        .view-btn {
+            background-color: rgba(74, 111, 165, 0.1);
+            color: var(--primary-color);
+        }
+
+        .view-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .download-btn {
+            background-color: rgba(255, 126, 95, 0.1);
+            color: var(--accent-color);
+        }
+
+        .download-btn:hover {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .download-group {
+            display: flex;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .download-group .download-btn {
+            flex: 1;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--secondary-color);
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        /* 页脚 */
+        footer {
+            background-color: var(--card-bg);
+            padding: 40px 0;
+            text-align: center;
+            border-top: 1px solid rgba(74, 111, 165, 0.2);
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .footer-links li {
+            margin: 0 15px;
+        }
+
+        .footer-links a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .copyright {
+            color: var(--secondary-color);
+            font-size: 0.9rem;
+        }
+
+        /* 响应式 */
+        @media (max-width: 992px) {
+            .notes-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .subjects-sidebar {
+                position: static;
+                margin-bottom: 20px;
+            }
+            
+            .subject-list {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            
+            .subject-item {
+                margin-bottom: 0;
+                flex: 1;
+                min-width: 120px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-controls {
+                width: 100%;
+                justify-content: space-between;
+                margin-top: 20px;
+            }
+            
+            .nav-links {
+                margin-right: 0;
+            }
+            
+            .page-header h2 {
+                font-size: 2.2rem;
+            }
+            
+            .current-subject-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .notes-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                margin-bottom: 20px;
+            }
+            
+            .nav-links li {
+                margin: 5px 15px 5px 0;
+            }
+            
+            .theme-switch-wrapper {
+                align-self: flex-end;
+            }
+            
+            .note-actions {
+                flex-direction: column;
+            }
+            
+            .download-group {
+                flex-direction: column;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .note-card {
+            animation: fadeIn 0.3s ease forwards;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <a href="index.html">
+                        <i class="fas fa-book-open logo-icon"></i>
+                        <h1>学习笔记</h1>
+                    </a>
+                </div>
+                <div class="nav-controls">
+                    <ul class="nav-links">
+                        <li><a href="index.html">个人门户</a></li>
+                        <li><a href="notes.html" class="active">学习笔记</a></li>
+                        <li><a href="blog.html">博客</a></li>
+                        <li><a href="bookshelf.html">书架</a></li>
+                        <li><a href="tools.html">工具集</a></li>
+                    </ul>
+                    <div class="theme-switch-wrapper">
+                        <label class="theme-switch" for="checkbox">
+                            <input type="checkbox" id="checkbox" />
+                            <div class="slider"></div>
+                        </label>
+                        <div class="theme-label">夜间模式</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="page-header">
+            <h2>学习笔记</h2>
+            <p>各科目知识整理，支持在线查看和多种格式下载</p>
+        </section>
+
+        <div class="notes-layout">
+            <!-- 科目侧边栏 -->
+            <aside class="subjects-sidebar">
+                <h3>科目分类</h3>
+                <ul class="subject-list" id="subject-list">
+                    <!-- 动态加载 -->
+                </ul>
+            </aside>
+
+            <!-- 笔记内容区域 -->
+            <section class="notes-content">
+                <div class="current-subject-header" id="current-subject-header">
+                    <!-- 动态加载 -->
+                </div>
+                <div class="notes-grid" id="notes-grid">
+                    <!-- 动态加载 -->
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <ul class="footer-links">
+                    <li><a href="index.html">个人门户</a></li>
+                    <li><a href="notes.html">学习笔记</a></li>
+                    <li><a href="blog.html">博客</a></li>
+                    <li><a href="bookshelf.html">书架</a></li>
+                    <li><a href="tools.html">工具集</a></li>
+                </ul>
+                <p class="copyright">© 2025 学习笔记 | 知识整理与分享</p>
+                <p class="copyright">最后更新: <span id="current-date"></span></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="config.js"></script>
+    <script src="shared/darkmode.js"></script>
+    <script>
+        // 全局变量
+        let notesData = null;
+        let currentSubjectId = null;
+
+        // 加载笔记数据
+        async function loadNotesData() {
+            try {
+                const response = await fetch('./data/notes.json');
+                notesData = await response.json();
+                return notesData;
+            } catch (error) {
+                console.error('加载笔记数据失败:', error);
+                return null;
+            }
+        }
+
+        // 渲染科目列表
+        function renderSubjectList(subjects) {
+            const container = document.getElementById('subject-list');
+            let html = '';
+            subjects.forEach(subject => {
+                const noteCount = subject.notes.length;
+                const isActive = currentSubjectId === subject.id;
+                html += `
+                    <li class="subject-item">
+                        <button class="subject-btn ${isActive ? 'active' : ''}" data-subject-id="${subject.id}">
+                            ${subject.name}
+                            <span class="subject-count">${noteCount}</span>
+                        </button>
+                    </li>
+                `;
+            });
+            container.innerHTML = html;
+
+            // 绑定科目点击事件
+            document.querySelectorAll('.subject-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const subjectId = btn.getAttribute('data-subject-id');
+                    setCurrentSubject(subjectId);
+                });
+            });
+        }
+
+        // 设置当前科目
+        function setCurrentSubject(subjectId) {
+            currentSubjectId = subjectId;
+            const subjects = notesData.subjects;
+            const currentSubject = subjects.find(s => s.id === subjectId);
+            
+            // 重新渲染科目列表（高亮当前）
+            renderSubjectList(subjects);
+            
+            // 渲染科目头部
+            renderSubjectHeader(currentSubject);
+            
+            // 渲染笔记列表
+            renderNotesList(currentSubject);
+        }
+
+        // 渲染科目头部
+        function renderSubjectHeader(subject) {
+            const container = document.getElementById('current-subject-header');
+            const cssUrl = subject.cssFile;
+            container.innerHTML = `
+                <div class="subject-info">
+                    <h3>${subject.name}</h3>
+                    <p>${subject.description}</p>
+                </div>
+                <button class="download-css-btn" data-css-url="${cssUrl}">
+                    <i class="fas fa-download"></i> 下载样式表 (CSS)
+                </button>
+            `;
+
+            // 绑定下载CSS按钮
+            const cssBtn = container.querySelector('.download-css-btn');
+            if (cssBtn) {
+                cssBtn.addEventListener('click', () => {
+                    const url = cssBtn.getAttribute('data-css-url');
+                    downloadFile(url, `${subject.id}_style.css`);
+                });
+            }
+        }
+
+        // 渲染笔记列表
+        function renderNotesList(subject) {
+            const container = document.getElementById('notes-grid');
+            const notes = subject.notes;
+            
+            if (!notes || notes.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-folder-open"></i>
+                        <p>暂无笔记</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            notes.forEach(note => {
+                const tagsHtml = note.tags.map(tag => `<span class="note-tag">${escapeHtml(tag)}</span>`).join('');
+                html += `
+                    <div class="note-card">
+                        <div class="note-header">
+                            <h4 class="note-title">${escapeHtml(note.title)}</h4>
+                            <div class="note-date">
+                                <i class="far fa-calendar-alt"></i> ${note.date}
+                            </div>
+                        </div>
+                        <div class="note-description">
+                            ${escapeHtml(note.description)}
+                        </div>
+                        <div class="note-tags">
+                            ${tagsHtml}
+                        </div>
+                        <div class="note-actions">
+                            <div class="download-group">
+                                <button class="download-btn" data-file="${note.mdFile}" data-ext="md">
+                                    <i class="fab fa-markdown"></i> .md
+                                </button>
+                                <button class="download-btn" data-file="${note.htmlFile}" data-ext="html">
+                                    <i class="fab fa-html5"></i> .html
+                                </button>
+                                <button class="download-btn" data-file="${note.pdfFile}" data-ext="pdf">
+                                    <i class="fas fa-file-pdf"></i> .pdf
+                                </button>
+                            </div>
+                            <div class="view-group" style="display: flex; gap: 8px; width: 100%;">
+                                <a href="${note.htmlFile}" class="view-btn" target="_blank">
+                                    <i class="fas fa-eye"></i> 查看 HTML
+                                </a>
+                                <a href="${note.pdfFile}" class="view-btn" target="_blank">
+                                    <i class="fas fa-file-pdf"></i> 查看 PDF
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+
+            // 绑定下载按钮事件
+            container.querySelectorAll('.download-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const fileUrl = btn.getAttribute('data-file');
+                    const ext = btn.getAttribute('data-ext');
+                    const fileName = `${subject.id}_${note.id}.${ext}`; // 简化命名
+                    downloadFile(fileUrl, fileName);
+                });
+            });
+        }
+
+        // 下载文件辅助函数
+        function downloadFile(url, filename) {
+            // 创建隐藏的a标签进行下载
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        // 简单的防XSS
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+                return c;
+            });
+        }
+
+        // 设置当前日期
+        function setCurrentDate() {
+            const el = document.getElementById('current-date');
+            if (el) {
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                el.textContent = now.toLocaleDateString('zh-CN', options);
+            }
+        }
+
+        // 初始化
+        async function init() {
+            setCurrentDate();
+            new DarkModeComponent();
+            
+            // 设置导航激活状态
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                if (link.getAttribute('href') === 'notes.html') {
+                    link.classList.add('active');
+                }
+            });
+            
+            // 加载数据
+            const data = await loadNotesData();
+            if (data && data.subjects && data.subjects.length > 0) {
+                notesData = data;
+                // 默认选中第一个科目
+                currentSubjectId = data.subjects[0].id;
+                renderSubjectList(data.subjects);
+                const currentSubject = data.subjects.find(s => s.id === currentSubjectId);
+                renderSubjectHeader(currentSubject);
+                renderNotesList(currentSubject);
+            } else {
+                document.getElementById('notes-grid').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>无法加载笔记数据，请检查 data/notes.json 文件</p>
+                    </div>
+                `;
+            }
+            
+            // 暗色模式切换
+            document.getElementById('checkbox').addEventListener('change', function() {
+                new DarkModeComponent().toggleDarkMode();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
