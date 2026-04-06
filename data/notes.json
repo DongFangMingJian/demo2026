@@ -6,25 +6,26 @@
       "description": "高等数学、线性代数、概率论等数学笔记",
       "cssFile": "./notes/css/math.css",
       "notes": [
+        
         {
           "id": "math_1",
-          "title": "微积分基础",
-          "description": "导数、积分、极限的基本概念和公式",
-          "date": "2025-03-15",
-          "tags": ["微积分", "高等数学"],
-          "mdFile": "./notes/math/calculus_basics.md",
-          "htmlFile": "./notes/math/calculus_basics.html",
-          "pdfFile": "./notes/math/calculus_basics.pdf"
-        },
-        {
-          "id": "math_2",
-          "title": "线性代数核心",
+          "title": "离散数学",
           "description": "矩阵运算、特征值、特征向量、线性空间",
           "date": "2025-03-20",
           "tags": ["线性代数", "矩阵"],
-          "mdFile": "./notes/math/linear_algebra.md",
-          "htmlFile": "./notes/math/linear_algebra.html",
-          "pdfFile": "./notes/math/linear_algebra.pdf"
+          "mdFile": "./notes/math/discrete_mathematics.md",
+          "htmlFile": "./notes/math/discrete_mathematics.html",
+          "pdfFile": "./notes/math/discrete_mathematics.pdf"
+        },
+        {
+          "id": "math_2",
+          "title": "微积分",
+          "description": "导数、积分、极限的基本概念和公式",
+          "date": "2026-4-6",
+          "tags": ["微积分", "高等数学"],
+          "mdFile": "./notes/math/calculus.md",
+          "htmlFile": "./notes/math/calculus.html",
+          "pdfFile": "./notes/math/calculus.pdf"
         }
       ]
     },
