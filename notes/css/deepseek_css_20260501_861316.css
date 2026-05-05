@@ -1,0 +1,481 @@
+/* ===========================================
+   数据结构（C语言描述）笔记本主题（禁用连字）
+   基础字体：12px（可调整）
+   设计：浅灰蓝色方格纸背景，等宽代码优先
+   强调：红色加粗，蓝色加粗斜体
+   代码高亮：C语言关键字、类型、预处理、注释等
+   打印：保留所有颜色与背景
+   连字：已禁用，-> 不会显示为箭头
+   =========================================== */
+
+:root {
+  --paper-color: #f5f7fa;
+  --grid-color: rgba(100, 120, 140, 0.12);
+  --text-color: #2c3e50;
+  --emphasis-color: #c0392b;
+  --italic-color: #2980b9;
+  --link-color: #2980b9;
+  --link-hover: #1abc9c;
+  --code-bg: #f0f2f5;
+  --border-color: #d0d7de;
+  --black-color: #2c3e50;
+  --code-font: 'Fira Code', 'Cascadia Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+}
+
+html body {
+  font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-color);
+  background-color: var(--paper-color);
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 15px;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  word-wrap: break-word;
+  box-sizing: border-box;
+
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  color-adjust: exact !important;
+}
+
+/* ===== 标题 ===== */
+html body h1,
+html body h2,
+html body h3 {
+  text-align: center;
+  font-weight: 700;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  color: #1a2b3c;
+  border: none !important;
+  padding-bottom: 0 !important;
+  line-height: 1.2;
+}
+html body h1 { font-size: 2.25em; }
+html body h2 { font-size: 1.75em; }
+html body h3 { font-size: 1.5em; }
+
+html body h4,
+html body h5,
+html body h6 {
+  font-weight: 700;
+  margin-top: 0.8em;
+  margin-bottom: 0.3em;
+  color: #1a2b3c;
+  border: none !important;
+  padding-bottom: 0 !important;
+  text-align: left;
+  line-height: 1.2;
+}
+html body h4 {
+  font-size: 1.25em;
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+}
+html body h5 { font-size: 1.1em; }
+html body h6 { font-size: 1em; color: #4a627a; }
+
+/* ===== 强调样式 ===== */
+html body strong {
+  color: var(--emphasis-color);
+  font-weight: 700;
+}
+html body em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--italic-color);
+}
+
+/* ===== 删除线（紫色楷体，无删除线）===== */
+html body del,
+html body s {
+  color: #8e44ad;
+  font-family: '楷体', 'KaiTi', 'STKaiti', 'Kai', serif;
+  text-decoration: none;
+}
+
+/* ===== 链接 ===== */
+html body a {
+  color: var(--link-color);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--link-color);
+}
+html body a:hover {
+  color: var(--link-hover);
+  border-bottom: 1px solid var(--link-hover);
+}
+
+/* ===== 图片 ===== */
+html body img {
+  max-width: 100%;
+  display: block;
+  margin: 0.8em auto;
+}
+
+/* ===== 段落 ===== */
+html body > p {
+  margin-top: 0;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+/* ===== 列表 ===== */
+html body > ol,
+html body > ul {
+  margin-bottom: 12px;
+  margin-top: 0;
+  line-height: 1.5;
+}
+html body ol {
+  padding-left: 1.8em;
+  list-style-type: decimal;
+}
+html body ul {
+  padding-left: 1.8em;
+  list-style-type: disc;
+}
+html body ul li::marker {
+  font-size: 0.7em;
+  color: #7f8c8d;
+}
+html body ul ul {
+  list-style-type: circle;
+}
+html body ul ul ul {
+  list-style-type: square;
+}
+html body li {
+  margin-bottom: 0;
+  line-height: 1.5;
+  padding: 1px 0;
+}
+html body li.task-list-item {
+  list-style: none;
+}
+html body .task-list-item-checkbox {
+  margin: 0 0.2em 0.2em -1.6em;
+  vertical-align: middle;
+}
+
+/* ===== 引用块（透明缩进，无边框）===== */
+html body blockquote {
+  margin: 8px 0;
+  padding: 0 0 0 24px;
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  font-family: inherit;
+  line-height: inherit;
+}
+html body blockquote blockquote {
+  padding-left: 48px;
+  margin: 4px 0;
+}
+html body blockquote blockquote blockquote {
+  padding-left: 72px;
+}
+
+/* ===== 水平线 ===== */
+html body hr {
+  height: 2px;
+  margin: 24px 0;
+  background-color: var(--border-color);
+  border: 0 none;
+}
+
+/* ===== 普通表格（无边框）===== */
+html body table {
+  margin: 8px 0 12px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  display: table;
+  width: 100%;
+  word-break: break-word;
+  border: none;
+  font-size: 1em;
+}
+html body table th {
+  font-weight: normal;
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  text-align: left;
+}
+html body table td,
+html body table th {
+  border: none;
+  padding: 4px 8px;
+  vertical-align: top;
+  font-size: 1em;
+  line-height: 1.5;
+  color: inherit;
+  word-break: break-word;
+}
+
+/* ===== 带边框表格（用于结构化数据）===== */
+.bordered-table {
+  border-collapse: collapse;
+  border: 2px solid var(--border-color);
+}
+.bordered-table th,
+.bordered-table td {
+  border: 1px solid var(--border-color);
+  padding: 4px 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+.bordered-table th {
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* ===== 代码块（基础样式，并禁用连字）===== */
+html body pre,
+html body code,
+.highlight,
+.console {
+  font-variant-ligatures: none;          /* 禁用标准连字 */
+  font-feature-settings: "liga" 0;       /* 禁用特定连字特性，兼容性更好 */
+  text-rendering: optimizeSpeed;         /* 可选：加快渲染，不优化连字 */
+}
+
+html body pre {
+  padding: 0.8em;
+  overflow: auto;
+  line-height: 1.4;
+  background-color: #f8f9fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 6px;
+  font-size: 0.9em;
+  margin-bottom: 12px;
+}
+html body code {
+  font-family: var(--code-font);
+  font-size: 0.85em;
+  background-color: #f0f2f5;
+  border-radius: 3px;
+  padding: 2px 4px;
+  color: #d14;
+}
+html body pre code {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: inherit;
+  color: inherit;
+}
+
+/* ===== C 语言语法高亮（基于 Pygments 'default' 风格适配）===== */
+/* 关键字（if, while, return, sizeof 等） */
+.highlight .k, .highlight .kd, .highlight .kn, .highlight .kp, .highlight .kr,
+.highlight .kt, .highlight .keyword {
+  color: #0086b3;
+  font-weight: bold;
+}
+/* 数据类型（int, char, double, struct, enum 等） */
+.highlight .kt, .highlight .nc, .highlight .struct {
+  color: #458;
+  font-weight: bold;
+}
+/* 预处理指令（#include, #define 等） */
+.highlight .cp, .highlight .c1.cp, .highlight .c.cp {
+  color: #a0a;
+  font-weight: bold;
+}
+/* 函数名 */
+.highlight .nf, .highlight .n.f {
+  color: #795da3;
+  font-weight: bold;
+}
+/* 字符串 */
+.highlight .s, .highlight .sa, .highlight .sb, .highlight .sc,
+.highlight .dl, .highlight .s2 {
+  color: #d14;
+}
+/* 注释 */
+.highlight .c, .highlight .c1, .highlight .cm, .highlight .cs {
+  color: #998;
+  font-style: italic;
+}
+/* 运算符（->, *, &, +, = 等） */
+.highlight .o, .highlight .ow {
+  color: #0086b3;
+}
+/* 数字 */
+.highlight .mi, .highlight .mf, .highlight .mh, .highlight .mo, .highlight .il {
+  color: #099;
+}
+/* 内置函数/宏（printf, malloc, NULL 等） */
+.highlight .nb, .highlight .bp {
+  color: #0086b3;
+}
+/* 错误 */
+.highlight .err {
+  color: #a61717;
+  background-color: #e3d2d2;
+}
+/* 差异等 */
+.highlight .gh, .highlight .gp, .highlight .gu { color: #000; }
+.highlight .gi { color: #2c5e2e; }
+.highlight .gd { color: #a31515; }
+
+/* ===== 控制台/终端输出样式（保留）===== */
+.console {
+  background-color: #1e1e1e;
+  color: #d4d4d4;
+  font-family: var(--code-font);
+  padding: 0.8em;
+  border-radius: 6px;
+  margin: 12px 0;
+  overflow-x: auto;
+  white-space: pre-wrap;
+  font-size: 0.85em;
+  border: 1px solid #333;
+}
+.console .prompt {
+  color: #6a9955;
+}
+.console .error {
+  color: #f48771;
+}
+.console .output {
+  color: #9cdcfe;
+}
+
+/* ===== 数学公式（如果需要，保留小一号）===== */
+.katex, .math, .mjx-chtml, .mjx-math {
+  font-size: 0.95em !important;
+}
+.katex-display {
+  font-size: 0.95em !important;
+  margin: 0.5em 0 !important;
+}
+
+/* ===== 公式加框（可选）===== */
+.boxed-formula {
+  display: block;
+  width: fit-content;
+  margin: 0.8em auto;
+  border: 1px solid var(--black-color);
+  padding: 0.3em 0.8em;
+  text-align: center;
+  background: transparent;
+  font-size: 0.9em;
+}
+
+/* ===== 例题类（保留左上/右下浅框，第一行绿色）===== */
+.example {
+  position: relative;
+  padding: 12px;
+  margin: 1.2em 0;
+}
+.example::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border-top: 1px solid rgba(0,0,0,0.15);
+  border-left: 1px solid rgba(0,0,0,0.15);
+  pointer-events: none;
+}
+.example::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  border-right: 1px solid rgba(0,0,0,0.15);
+  pointer-events: none;
+}
+.example::first-line {
+  color: #2e8b57;
+  font-family: '楷体', 'KaiTi', 'STKaiti', 'Kai', serif;
+}
+
+/* ===== 通用间距 ===== */
+html body blockquote,
+html body dl,
+html body ol,
+html body p,
+html body pre,
+html body ul {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+/* ===== 打印样式（保留所有颜色）===== */
+@media print {
+  html body {
+    background-color: var(--paper-color) !important;
+    background-image: 
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+    padding: 15px !important;
+    font-size: 12px !important;
+  }
+  html body h1, html body h2, html body h3,
+  html body h4, html body h5, html body h6 {
+    color: #1a2b3c !important;
+  }
+  html body strong { color: var(--emphasis-color) !important; }
+  html body em { color: var(--italic-color) !important; }
+  html body del, html body s {
+    color: #8e44ad !important;
+    font-family: '楷体', 'KaiTi', 'STKaiti', 'Kai', serif !important;
+    text-decoration: none !important;
+  }
+  html body blockquote {
+    background-color: transparent !important;
+    border: none !important;
+    padding-left: 24px !important;
+    margin: 8px 0 !important;
+  }
+  html body pre, .console {
+    background-color: #f8f9fa !important;
+    border: 1px solid #ccc !important;
+  }
+  .bordered-table, .bordered-table th, .bordered-table td {
+    border-color: var(--border-color) !important;
+  }
+  .example::before, .example::after {
+    border-color: rgba(0,0,0,0.15) !important;
+  }
+  .example::first-line {
+    color: #2e8b57 !important;
+    font-family: '楷体', 'KaiTi', 'STKaiti', 'Kai', serif !important;
+  }
+  .katex, .math, .katex-display, .mjx-chtml, .mjx-math {
+    font-size: 0.9em !important;
+  }
+}
+
+/* ===== 移动端优化 ===== */
+@media (max-width: 768px) {
+  html body {
+    padding: 12px;
+    background-size: 15px 15px;
+    line-height: 1.45;
+  }
+  html body h1 { font-size: 1.8em; }
+  html body h2 { font-size: 1.5em; }
+  html body h3 { font-size: 1.3em; }
+  html body blockquote { padding-left: 20px; margin: 6px 0; }
+  html body blockquote blockquote { padding-left: 36px; }
+  html body blockquote blockquote blockquote { padding-left: 52px; }
+  html body pre, .console {
+    font-size: 0.8em;
+    padding: 0.6em;
+  }
+  .katex, .math, .katex-display, .mjx-chtml, .mjx-math {
+    font-size: 0.85em !important;
+  }
+}

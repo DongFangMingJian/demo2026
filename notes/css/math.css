@@ -1,0 +1,580 @@
+/* ===========================================
+   数学笔记本主题 - 完整最终版
+   基础字体：12px（可调整）
+   设计：浅黄色方格纸背景，宋体正文
+   强调：红色加粗，蓝色加粗斜体（不倾斜）
+   删除线：紫色楷体，无删除线
+   四级标题（h4）：黑体
+   带边框表格类：.bordered-table（外框加粗，表头下框线加粗，文字居中）
+   公式加框类：.boxed-formula（居中带黑色边框）
+   例题类：.example（左上/右下浅框线，第一行绿色楷体）
+   打印：完美保留所有颜色与背景
+   =========================================== */
+
+:root {
+  --paper-color: #f8f4e8;
+  --grid-color: rgba(210, 180, 140, 0.15);
+  --text-color: #333;
+  --emphasis-color: #c00;
+  --italic-color: #0066cc;
+  --link-color: #0066cc;
+  --link-hover: #0088ff;
+  --code-bg: #f5f5f5;
+  --border-color: #d6c7a8;
+  --black-color: #000000;
+}
+
+html body {
+  font-family: 'SimSun', '宋体', 'STSong', 'Songti SC', serif;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-color);
+  background-color: var(--paper-color);
+  background-image: 
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: 20px 20px;
+  padding: 15px;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  word-wrap: break-word;
+  box-sizing: border-box;
+
+  /* 强制打印保留颜色和背景 */
+  -webkit-print-color-adjust: exact !important;
+  print-color-adjust: exact !important;
+  color-adjust: exact !important;
+}
+
+/* ===== 标题 ===== */
+html body h1,
+html body h2,
+html body h3 {
+  text-align: center;
+  font-weight: 700;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  color: #222;
+  border: none !important;
+  padding-bottom: 0 !important;
+  line-height: 1.2;
+}
+html body h1 { font-size: 2.25em; }
+html body h2 { font-size: 1.75em; }
+html body h3 { font-size: 1.5em; }
+
+html body h4,
+html body h5,
+html body h6 {
+  font-weight: 700;
+  margin-top: 0.8em;
+  margin-bottom: 0.3em;
+  color: #222;
+  border: none !important;
+  padding-bottom: 0 !important;
+  text-align: left;
+  line-height: 1.2;
+}
+html body h4 {
+  font-size: 1.25em;
+  font-family: 'SimHei', '黑体', 'Hei', 'Microsoft YaHei', sans-serif;
+}
+html body h5 { font-size: 1.1em; }
+html body h6 { font-size: 1em; color: #444; }
+
+/* ===== 强调样式 ===== */
+html body strong {
+  color: var(--emphasis-color);
+  font-weight: 700;
+}
+html body em {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--italic-color);
+}
+
+/* ===== 删除线样式（紫色楷体，无删除线）===== */
+html body del,
+html body s {
+  color: purple;
+  font-family: '楷体', 'KaiTi', 'STKaiti', 'Kai', serif;
+  text-decoration: none;
+}
+
+/* ===== 链接 ===== */
+html body a {
+  color: var(--link-color);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--link-color);
+}
+html body a:hover {
+  color: var(--link-hover);
+  border-bottom: 1px solid var(--link-hover);
+}
+html body a:not([href]) {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ===== 图片 ===== */
+html body img {
+  max-width: 100%;
+  display: block;
+  margin: 0.8em auto;
+}
+
+/* ===== 段落 ===== */
+html body > p {
+  margin-top: 0;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+/* ===== 列表 ===== */
+html body > ol,
+html body > ul {
+  margin-bottom: 12px;
+  margin-top: 0;
+  line-height: 1.4;
+}
+html body ol {
+  padding-left: 1.8em;
+  list-style-type: decimal;
+}
+html body ul {
+  padding-left: 1.8em;
+  list-style-type: disc;
+}
+html body ul li::marker {
+  font-size: 0.7em;
+  color: #666;
+}
+html body ul ul {
+  list-style-type: circle;
+}
+html body ul ul ul {
+  list-style-type: square;
+}
+html body ol.no-list,
+html body ul.no-list {
+  padding: 0;
+  list-style-type: none;
+}
+html body ol ol,
+html body ol ul,
+html body ul ol,
+html body ul ul {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+html body li {
+  margin-bottom: 0;
+  line-height: 1.4;
+  padding: 1px 0;
+}
+html body li.task-list-item {
+  list-style: none;
+}
+html body li > p {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 1.4;
+}
+html body .task-list-item-checkbox {
+  margin: 0 0.2em 0.2em -1.6em;
+  vertical-align: middle;
+}
+
+/* ===== 引用块（透明缩进，无竖线）===== */
+html body blockquote {
+  margin: 8px 0;
+  padding: 0 0 0 24px;
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  font-family: inherit;
+  line-height: inherit;
+  position: relative;
+}
+html body blockquote > :first-child { margin-top: 0; }
+html body blockquote > :last-child { margin-bottom: 0; }
+html body blockquote blockquote {
+  padding-left: 48px;
+  margin: 4px 0;
+}
+html body blockquote blockquote blockquote {
+  padding-left: 72px;
+}
+
+/* ===== 水平线 ===== */
+html body hr {
+  height: 2px;
+  margin: 24px 0;
+  background-color: var(--border-color);
+  border: 0 none;
+}
+
+/* ===== 表格（完全透明，无行区分，自动换行）===== */
+html body table {
+  margin: 8px 0 12px;
+  border-collapse: collapse;
+  border-spacing: 0;
+  display: table;
+  width: 100%;
+  word-break: break-word;
+  word-wrap: break-word;
+  border: none;
+  font-size: 1em;
+}
+html body table th {
+  font-weight: normal;
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  font-family: inherit;
+  text-align: left;
+}
+html body table td,
+html body table th {
+  border: none;
+  padding: 4px 8px;
+  vertical-align: top;
+  font-family: inherit;
+  font-size: 1em;
+  line-height: 1.4;
+  color: inherit;
+  word-wrap: break-word;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+}
+
+/* ===== 带边框的表格 - 外框加粗，表头下框线加粗，文字居中 ===== */
+.bordered-table {
+  border-collapse: collapse;
+  border: 2px solid var(--border-color);
+}
+.bordered-table th,
+.bordered-table td {
+  border: 1px solid var(--border-color);
+  padding: 4px 8px;
+  text-align: center;
+  vertical-align: middle;
+}
+.bordered-table th {
+  border-bottom: 2px solid var(--border-color);
+}
+
+/* ===== 定义列表 ===== */
+html body dl {
+  padding: 0;
+}
+html body dl dt {
+  padding: 0;
+  margin-top: 12px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 1.4;
+}
+html body dl dd {
+  padding: 0 12px;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+/* ===== 行内代码 ===== */
+html body code {
+  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 0.85em;
+  color: #000;
+  background-color: var(--code-bg);
+  border-radius: 3px;
+  padding: 1px 4px;
+  border: 1px solid #e0e0e0;
+  line-height: 1.3;
+}
+html body code::before,
+html body code::after {
+  letter-spacing: -0.2em;
+  content: '\00a0';
+}
+html body pre {
+  padding: 0.8em;
+  overflow: auto;
+  line-height: 1.3;
+  background-color: #f6f6f6;
+  border: 1px solid var(--border-color);
+  border-radius: 3px;
+  font-size: 0.9em;
+  margin-bottom: 12px;
+}
+html body pre > code {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: 0;
+  line-height: 1.3;
+  white-space: pre;
+}
+html body .highlight {
+  margin-bottom: 12px;
+}
+html body .highlight pre {
+  margin-bottom: 0;
+}
+
+/* ===== 键盘按键 ===== */
+html body kbd {
+  color: #000;
+  border: 1px solid var(--border-color);
+  border-bottom: 2px solid #c7c7c7;
+  padding: 1px 3px;
+  background-color: #f0f0f0;
+  border-radius: 3px;
+  font-size: 0.9em;
+}
+
+/* ===== 数学公式 ===== */
+.katex,
+.math,
+.mjx-chtml,
+.mjx-math {
+  font-size: 1em !important;
+}
+.katex-display {
+  font-size: 1em !important;
+  margin: 0.5em 0 !important;
+}
+.equation {
+  text-align: center;
+  margin: 0.8em 0;
+  padding: 6px;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 5px;
+  font-size: 1em;
+}
+.katex *,
+.math *,
+.mjx-chtml *,
+.mjx-math * {
+  font-size: inherit;
+}
+
+/* ===== 公式加框样式（居中带边框，用于数学公式或重要文本）===== */
+.boxed-formula {
+  display: block;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid var(--black-color);
+  padding: 0.3em 0.8em;
+  text-align: center;
+  background-color: transparent;
+  font-size: 0.9em;
+  line-height: 1.4;
+}
+
+/* ===== 例题类：左上/右下浅框线，第一行绿色楷体 ===== */
+.example {
+  position: relative;
+  padding: 12px;
+  margin: 1.2em 0;
+  /* 其余样式继承正文 */
+}
+
+/* 左上角浅色L形框线 */
+.example::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  border-left: 1px solid rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+/* 右下角浅色反向L形框线 */
+.example::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+/* 第一行：绿色楷体 */
+.example::first-line {
+  color: #2e8b57;
+  font-family: '楷体', 'KaiTi', 'STKaiti', 'Kai', serif;
+}
+
+/* ===== 通用间距 ===== */
+html body blockquote,
+html body dl,
+html body ol,
+html body p,
+html body pre,
+html body ul {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+/* ===== 打印样式 ===== */
+@media print {
+  html body {
+    background-color: var(--paper-color) !important;
+    background-image: 
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px) !important;
+    background-size: 20px 20px !important;
+    padding: 15px !important;
+    box-shadow: none !important;
+    line-height: 1.4 !important;
+    font-size: 12px !important;
+  }
+  html body h1,
+  html body h2,
+  html body h3,
+  html body h4,
+  html body h5,
+  html body h6 {
+    color: #222 !important;
+    margin-top: 1em !important;
+    margin-bottom: 0.5em !important;
+  }
+  html body strong {
+    color: var(--emphasis-color) !important;
+  }
+  html body em {
+    color: var(--italic-color) !important;
+  }
+  html body del,
+  html body s {
+    color: purple !important;
+    font-family: '楷体', 'KaiTi', 'STKaiti', 'Kai', serif !important;
+    text-decoration: none !important;
+  }
+  html body blockquote {
+    background-color: transparent !important;
+    border: none !important;
+    padding-left: 24px !important;
+    margin: 8px 0 !important;
+  }
+  html body ul {
+    list-style-type: disc !important;
+  }
+  html body ul ul {
+    list-style-type: circle !important;
+  }
+  html body ul ul ul {
+    list-style-type: square !important;
+  }
+  html body table {
+    border: none !important;
+    background-color: transparent !important;
+    table-layout: auto !important;
+  }
+  html body table th {
+    font-weight: normal !important;
+    background-color: transparent !important;
+  }
+  html body table td,
+  html body table th {
+    border: none !important;
+    padding: 4px 8px !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+  }
+
+  /* ===== 修复带边框表格的打印样式 ===== */
+  .bordered-table,
+  .bordered-table th,
+  .bordered-table td {
+    border: 2px solid var(--border-color) !important;
+  }
+  .bordered-table {
+    border-width: 2px !important;
+  }
+  .bordered-table th,
+  .bordered-table td {
+    border-width: 1px !important;
+  }
+  .bordered-table th {
+    border-bottom-width: 2px !important;
+  }
+  .bordered-table th,
+  .bordered-table td {
+    text-align: center !important;
+    vertical-align: middle !important;
+  }
+
+  /* 打印时保留例题类效果 */
+  .example::before,
+  .example::after {
+    border-color: rgba(0, 0, 0, 0.15) !important;
+  }
+  .example::first-line {
+    color: #2e8b57 !important;
+    font-family: '楷体', 'KaiTi', 'STKaiti', 'Kai', serif !important;
+  }
+  .katex,
+  .math,
+  .katex-display,
+  .mjx-chtml,
+  .mjx-math {
+    font-size: 0.9em !important;
+  }
+  html body pre {
+    background-color: #f6f6f6 !important;
+    border: 1px solid var(--border-color) !important;
+    padding: 0.8em !important;
+  }
+  html body code {
+    background-color: var(--code-bg) !important;
+    border: 1px solid #e0e0e0 !important;
+  }
+  html body a {
+    color: var(--link-color) !important;
+  }
+  html body > p,
+  html body > ol,
+  html body > ul,
+  html body blockquote,
+  html body dl,
+  html body pre,
+  html body .highlight {
+    margin-bottom: 12px !important;
+  }
+}
+
+/* ===== 移动端优化 ===== */
+@media (max-width: 768px) {
+  html body {
+    padding: 12px;
+    background-size: 15px 15px;
+    line-height: 1.35;
+  }
+  html body h1 { font-size: 1.8em; }
+  html body h2 { font-size: 1.5em; }
+  html body h3 { font-size: 1.3em; }
+  html body h4, html body h5, html body h6 { margin-top: 0.6em; margin-bottom: 0.2em; }
+  html body blockquote { padding-left: 20px; margin: 6px 0; }
+  html body blockquote blockquote { padding-left: 36px; }
+  html body blockquote blockquote blockquote { padding-left: 52px; }
+  html body ol, html body ul { padding-left: 1.5em; }
+  html body table td, html body table th { padding: 3px 6px; }
+  .katex, .math, .katex-display, .mjx-chtml, .mjx-math {
+    font-size: 0.85em !important;
+  }
+  html body > p, html body > ol, html body > ul,
+  html body blockquote, html body dl, html body pre, html body .highlight {
+    margin-bottom: 10px;
+  }
+}
