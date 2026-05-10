@@ -358,10 +358,10 @@ $$\large{\int \ln x \,dx = x\ln x - x + C}$$
 |------|------|
 | $\int \sin x \,dx$ | $-\cos x + C$ |
 | $\int \cos x \,dx$ | $\sin x + C$ |
-| $\int \tan x \,dx$ | $-\ln|\cos x| + C = \ln|\sec x| + C$ |
-| $\int \cot x \,dx$ | $\ln|\sin x| + C$ |
-| $\int \sec x \,dx$ | $\ln|\sec x + \tan x| + C$ |
-| $\int \csc x \,dx$ | $\ln|\csc x - \cot x| + C$ |
+| $\int \tan x \,dx$ | $-\ln\lvert\cos x\rvert + C = \ln\lvert\sec x\rvert + C$ |
+| $\int \cot x \,dx$ | $\ln\lvert\sin x\rvert + C$ |
+| $\int \sec x \,dx$ | $\ln\lvert\sec x + \tan x\rvert + C$ |
+| $\int \csc x \,dx$ | $\ln\lvert\csc x - \cot x\rvert + C$ |
 | $\int \sec^2 x \,dx$ | $\tan x + C$ |
 | $\int \csc^2 x \,dx$ | $-\cot x + C$ |
 | $\int \sec x \tan x \,dx$ | $\sec x + C$ |
